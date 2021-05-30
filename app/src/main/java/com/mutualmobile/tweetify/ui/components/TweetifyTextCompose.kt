@@ -93,14 +93,15 @@ fun extractSpans(text: String, patterns: List<Pattern>): List<SpanInfos> {
             matchStart = matcher.start(1)
             matchEnd = matcher.end()
 
-            var url = text.substring(matchStart, matchEnd)
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                url = "https://$url"
-            }
-            if (text.startsWith("#")) {
-                links.add(SpanInfos(url, matchStart, matchEnd, HASH_TAG))
+            var checkText = text.substring(matchStart, matchEnd)
+
+            if (checkText.startsWith("#")) {
+                links.add(SpanInfos(checkText, matchStart, matchEnd, HASH_TAG))
             } else {
-                links.add(SpanInfos(url, matchStart, matchEnd, URL_TAG))
+                if (!checkText.startsWith("http://") && !checkText.startsWith("https://")) {
+                    checkText = "https://$checkText"
+                }
+                links.add(SpanInfos(checkText, matchStart, matchEnd, URL_TAG))
             }
         }
     }

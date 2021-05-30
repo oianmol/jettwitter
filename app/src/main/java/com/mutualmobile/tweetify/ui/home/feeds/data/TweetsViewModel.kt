@@ -1,15 +1,17 @@
 package com.mutualmobile.tweetify.ui.home.feeds.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class TweetsViewModel : ViewModel() {
 
-    private val _tweetsLive = MutableLiveData<List<Tweet>>()
-    val tweetsLiveData: LiveData<List<Tweet>> = _tweetsLive
+    var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
+        private set
+
 
     private val repository = TweetsRepository()
 
@@ -20,13 +22,15 @@ class TweetsViewModel : ViewModel() {
     private fun fetchTweets() {
         viewModelScope.launch {
             val tweets = repository.fetch()
-            _tweetsLive.postValue(tweets)
+            tweetsState = TweetState.Success(tweets)
         }
     }
 
     fun loadMetadata(tweet: Tweet, url: String) {
         viewModelScope.launch {
-            repository.printUrlMatadata(url)
+            val meta = repository.fetchUrlMatadata(url)
+            repository.setMetaForTweet(meta,tweet)
+            fetchTweets()
         }
     }
 }

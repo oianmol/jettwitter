@@ -50,4 +50,3 @@ fun TweetifyApp(finishActivity: () -> Unit) {
 
 
 
-
