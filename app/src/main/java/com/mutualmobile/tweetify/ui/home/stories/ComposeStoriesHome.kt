@@ -50,9 +50,7 @@ fun ComposeUserStory(userStory: UserStory?) {
             )
         } ?: let {
             RoundedUserImage(
-                PHOTO_URL, Modifier
-                    .requiredSize(60.dp)
-                    .padding(2.dp)
+                PHOTO_URL
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -73,7 +71,9 @@ private fun StoryUserName(userStory: UserStory?) {
 }
 
 @Composable
-fun RoundedUserImage(url: String, modifier: Modifier) {
+fun RoundedUserImage(url: String, modifier: Modifier = Modifier
+    .requiredSize(60.dp)
+    .padding(2.dp)) {
     TweetifySurface(
         shape = CircleShape,
         modifier = modifier,
