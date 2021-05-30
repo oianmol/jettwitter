@@ -48,7 +48,6 @@ private fun NavigationIcon(
         painterResource(screen.icon),
         contentDescription = null,
         modifier = Modifier.size(28.dp),
-        tint = TweetifyTheme.colors.accent
     )
 }
 

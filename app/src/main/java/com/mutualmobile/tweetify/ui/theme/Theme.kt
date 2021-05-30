@@ -35,6 +35,7 @@ private val LightColorPalette = TweetifyColorPalette(
     error = FunctionalRed,
     progressIndicatorBg = LightGrey,
     switchColor = TwitterColor,
+    statusBarColor = Neutral6,
     isDark = false
 )
 
@@ -59,6 +60,7 @@ private val DarkColorPalette = TweetifyColorPalette(
     error = FunctionalRedDark,
     progressIndicatorBg = LightGrey,
     switchColor = TwitterColor,
+    statusBarColor = GreyBg,
     isDark = true
 )
 
@@ -118,6 +120,7 @@ class TweetifyColorPalette(
     notificationBadge: Color = error,
     progressIndicatorBg: Color,
     switchColor: Color,
+    statusBarColor:Color,
     isDark: Boolean
 ) {
     var brand by mutableStateOf(brand)
@@ -129,6 +132,8 @@ class TweetifyColorPalette(
     var iconTint by mutableStateOf(iconTint)
         private set
     var uiBackground by mutableStateOf(uiBackground)
+        private set
+    var statusBarColor by mutableStateOf(statusBarColor)
         private set
     var uiBorder by mutableStateOf(uiBorder)
         private set
@@ -182,6 +187,7 @@ class TweetifyColorPalette(
         error = other.error
         notificationBadge = other.notificationBadge
         switchColor = other.switchColor
+        statusBarColor = other.statusBarColor
         isDark = other.isDark
     }
 }
