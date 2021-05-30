@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.mutualmobile.tweetify.R
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
@@ -19,7 +20,8 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 fun TweetifyTopAppBar(function: () -> Unit) {
     TweetifySurface(
         color = TweetifyTheme.colors.uiBackground,
-        contentColor = TweetifyTheme.colors.accent
+        contentColor = TweetifyTheme.colors.accent,
+        elevation = 4.dp
     ) {
         TopAppBar(
             title = {
@@ -48,7 +50,7 @@ fun TweetifyTopAppBar(function: () -> Unit) {
                         contentDescription = null
                     )
                 }
-            }
+            },elevation = 4.dp
         )
     }
 }

@@ -8,27 +8,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweetAdvertisementBanner
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweet
-import com.mutualmobile.tweetify.ui.home.feeds.data.TweetsRepository
+import com.mutualmobile.tweetify.ui.home.feeds.data.TweetsViewModel
 import com.mutualmobile.tweetify.ui.home.stories.ComposeStoriesHome
 import com.mutualmobile.tweetify.ui.home.stories.UserStoriesRepository
-import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
 import com.mutualmobile.tweetify.ui.theme.AlphaNearTransparent
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
-fun HomeScreen() {
-    val tweets = TweetsRepository.fetch()
+fun HomeScreen(tweetsViewModel: TweetsViewModel = TweetsViewModel()) {
+
+    val tweetsLiveData by tweetsViewModel.tweetsLiveData.observeAsState(listOf())
+
     TweetifySurface(Modifier.fillMaxSize()) {
         LazyColumn {
             item {
                 Column {
-                    Divider(color = Color.Gray.copy(AlphaNearOpaque), thickness = 0.5.dp)
                     Spacer(modifier = Modifier.height(2.dp))
                     ComposeStoriesHome(UserStoriesRepository.fetchStories())
                     Spacer(modifier = Modifier.height(2.dp))
@@ -47,8 +48,8 @@ fun HomeScreen() {
                     )
                 }
             }
-            items(items = tweets) { tweet ->
-                ComposeTweet(tweet)
+            items(items = tweetsLiveData) { tweet ->
+                ComposeTweet(tweet, tweetsViewModel)
             }
         }
 
