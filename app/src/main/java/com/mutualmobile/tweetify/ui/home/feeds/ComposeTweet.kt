@@ -23,7 +23,6 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.mutualmobile.tweetify.ui.components.ComposeTweetifyFeedText
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.feeds.data.Tweet
-import com.mutualmobile.tweetify.ui.home.feeds.data.TweetUrlMeta
 import com.mutualmobile.tweetify.ui.home.feeds.data.TweetsViewModel
 import com.mutualmobile.tweetify.ui.home.stories.RoundedUserImage
 import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
@@ -81,32 +80,34 @@ fun ComposeTweetMetadata(tweet: Tweet) {
                         .height(180.dp)
                         .fillMaxWidth(), contentScale = ContentScale.Crop
                 )
-                ComposeMetadataFooter(tweetUrlMeta, modifier = Modifier
-                    .constrainAs(footer) {
-                        bottom.linkTo(image.bottom, margin = 2.dp)
-                    }
-                    .fillMaxWidth(), tweet)
+                ComposeMetadataFooter(tweetUrlMeta.title ?: tweet.tUName,
+                    tweetUrlMeta.desc ?: tweet.tUText,
+                    modifier = Modifier
+                        .constrainAs(footer) {
+                            bottom.linkTo(image.bottom, margin = 0.dp)
+                        }
+                        .fillMaxWidth())
             }
         }
     }
 }
 
 @Composable
-fun ComposeMetadataFooter(tweetUrlMeta: TweetUrlMeta, modifier: Modifier, tweet: Tweet) {
+fun ComposeMetadataFooter(title: String, desc: String, modifier: Modifier) {
     TweetifySurface(
         color = TweetifyTheme.colors.uiBackground.copy(AlphaNearOpaque),
         modifier = modifier
     ) {
         Column {
             Text(
-                tweetUrlMeta.title ?: tweet.tUName,
+                title,
                 fontSize = 12.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(4.dp)
             )
             Text(
-                tweetUrlMeta.desc ?: tweet.tUText,
+                desc,
                 fontSize = 10.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,

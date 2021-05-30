@@ -1,5 +1,7 @@
 package com.mutualmobile.tweetify.ui.home
 
+import androidx.compose.material.DrawerDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
@@ -10,6 +12,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.TweetifyBottomAppBar
 import com.mutualmobile.tweetify.ui.home.drawer.TweetifyDrawer
+import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -25,10 +28,16 @@ fun TweetifyScaffold(
         topBar = { TweetifyTopBar(scaffoldState) },
         drawerContent = { TweetifyDrawer() },
         content = { TweetifyNavigationHost(navController) },
-        bottomBar = { TweetifyBottomAppBar(navController) }
+        bottomBar = { TweetifyBottomAppBar(navController) },
+        drawerShape = MaterialTheme.shapes.medium,
+        drawerElevation = DrawerDefaults.Elevation,
+        drawerBackgroundColor = TweetifyTheme.colors.uiBackground,
+        drawerContentColor = TweetifyTheme.colors.textSecondary,
+        drawerScrimColor = TweetifyTheme.colors.uiBorder,
+        backgroundColor = TweetifyTheme.colors.uiBackground,
+        contentColor = TweetifyTheme.colors.textSecondary,
     )
 }
-
 
 
 @Composable

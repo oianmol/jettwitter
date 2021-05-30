@@ -1,7 +1,6 @@
 package com.mutualmobile.tweetify.ui.home.feeds.data
 
 data class Tweet(
-    val id: Int,
     val tUName: String,
     val tUImage: String,
     val tUText: String,

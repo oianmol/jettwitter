@@ -9,51 +9,10 @@ import org.jsoup.nodes.Document
 
 class TweetsRepository {
     val tweetsList = mutableListOf<Tweet>()
+    val cacheUrlMap = hashMapOf<String, TweetUrlMeta>()
 
     init {
         prepareTweets()
-    }
-
-    private fun prepareTweets() {
-        tweetsList.add(
-            Tweet(
-                id = 3,
-                tUName = "Sean Cummings",
-                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
-                tUText = "Aggressive Ponytail #freebandnames",
-                tUTime = 1622360101468L,
-                tUHandler = "@sean_cummings",
-                tCommentCount = 3335465,
-                tLikeCount = 45,
-                tRTCount = 5678
-            )
-        )
-        tweetsList.add(
-            Tweet(
-                id = 2,
-                tUName = "Supabase",
-                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
-                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
-                tUTime = 1622370333814L,
-                tUHandler = "@supabase_io",
-                tCommentCount = 33465,
-                tLikeCount = 18000,
-                tRTCount = 78,
-            )
-        )
-        tweetsList.add(
-            Tweet(
-                id = 1,
-                tUName = "Apple Podcasts",
-                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
-                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
-                tUTime = 1622360101568L,
-                tUHandler = "@ApplePodcasts",
-                tCommentCount = 3335465,
-                tLikeCount = 1800000,
-                tRTCount = 5678
-            )
-        )
     }
 
     fun fetch(): List<Tweet> {
@@ -62,10 +21,11 @@ class TweetsRepository {
 
     suspend fun fetchUrlMatadata(url: String?): TweetUrlMeta? {
         val tweetUrlMeta = TweetUrlMeta()
+        if (cacheUrlMap.containsKey(url)) return cacheUrlMap[url!!]
 
         withContext(Dispatchers.IO) {
             val con = Jsoup.connect(url)
-            val doc = con.userAgent("Safari").get()
+            val doc = con.userAgent("Mozilla").get()
             val ogTags = doc.select("meta[property^=og:]")
             when {
                 ogTags.size > 0 ->
@@ -80,12 +40,1275 @@ class TweetsRepository {
                         }
                     }
             }
-            Log.e("tweet meta $url",tweetUrlMeta.toString())
+            cacheUrlMap[url!!] = tweetUrlMeta
+            Log.e("tweet meta $url", tweetUrlMeta.toString())
         }
         return tweetUrlMeta
     }
 
-    fun setMetaForTweet(meta: TweetUrlMeta?, tweet: Tweet) {
-        tweetsList.firstOrNull { it.id == tweet.id }?.metadata = meta
+    private fun prepareTweets() {
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1209802752819261440/jvir-xNm_400x400.jpg",
+                tUText = "Aggressive Ponytail #freebandnames",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Sean Cummings",
+                tUImage = "https://pbs.twimg.com/profile_images/1367145689910710279/S9GtuoFo_400x400.jpg",
+                tUText = " As checked the refund of INR 3000 is under process it will reflect to the mode of payment in 5-7 working days so, request you to please wait for the same as it is already escalated to the team to process the refund on priority. Your patience is highly appreciated.\n",
+                tUTime = 1622360101468L,
+                tUHandler = "@sean_cummings",
+                tCommentCount = 3335465,
+                tLikeCount = 45,
+                tRTCount = 5678
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Supabase",
+                tUImage = "https://pbs.twimg.com/profile_images/1397471927132844033/jN-wuufb_400x400.jpg",
+                tUText = "Supabase Storage is now available! https://supabase.io/blog/2021/03/30/supabase-storage #supalaunchweek",
+                tUTime = 1622370333814L,
+                tUHandler = "@supabase_io",
+                tCommentCount = 33465,
+                tLikeCount = 18000,
+                tRTCount = 78,
+            )
+        )
+        tweetsList.add(
+            Tweet(
+                tUName = "Apple Podcasts",
+                tUImage = "https://pbs.twimg.com/profile_images/1009097162104246272/07rvgUrd_400x400.jpg",
+                tUText = "Celebrate the diversity of Asian American and Pacific Islander communities with this collection of podcasts about identity, history, culture, food and more. http://apple.co/NeverVoiceless #APAHM\n",
+                tUTime = 1622360101568L,
+                tUHandler = "@ApplePodcasts",
+                tCommentCount = 3335465,
+                tLikeCount = 1800000,
+                tRTCount = 5678
+            )
+        )
+
+
     }
+
 }

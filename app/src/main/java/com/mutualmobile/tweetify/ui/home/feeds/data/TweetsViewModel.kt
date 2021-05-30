@@ -29,7 +29,7 @@ class TweetsViewModel : ViewModel() {
     fun loadMetadata(tweet: Tweet, url: String) {
         viewModelScope.launch {
             val meta = repository.fetchUrlMatadata(url)
-            repository.setMetaForTweet(meta,tweet)
+            tweet.metadata = meta
             fetchTweets()
         }
     }
