@@ -28,7 +28,13 @@ fun TweetifyScaffold() {
             .navigationBarsPadding(),
         topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar) },
         drawerContent = { TweetifyHomeDrawer() },
-        bottomBar = { TweetifyHomeBottomAppBar(navActions.switchBottomTab, navController,shouldShowAppBar) },
+        bottomBar = {
+            TweetifyHomeBottomAppBar(
+                navActions.switchBottomTab,
+                navController,
+                shouldShowAppBar
+            )
+        },
         drawerShape = MaterialTheme.shapes.medium,
         drawerElevation = DrawerDefaults.Elevation,
         drawerBackgroundColor = TweetifyTheme.colors.uiBackground,

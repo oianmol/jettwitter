@@ -23,15 +23,20 @@ fun TweetifyHomeBottomAppBar(
     navController: NavHostController,
     shouldShowAppBar: Boolean
 ) {
-    if(shouldShowAppBar){
+    val currentRoute = currentRoute(navController)
+
+    if (shouldShowAppBar) {
         TweetifySurface(
             color = TweetifyTheme.colors.uiBackground,
             contentColor = TweetifyTheme.colors.accent,
             elevation = 8.dp
         ) {
-            BottomNavigation(backgroundColor = TweetifyTheme.colors.uiBackground, elevation = 4.dp) {
+            BottomNavigation(
+                backgroundColor = TweetifyTheme.colors.uiBackground,
+                elevation = 4.dp
+            ) {
                 bottomNavigationItems.forEach { screen ->
-                    BottomNavigationTab(screen, switchBottomTab, navController)
+                    BottomNavigationTab(screen, switchBottomTab, currentRoute)
                 }
             }
         }
@@ -39,7 +44,7 @@ fun TweetifyHomeBottomAppBar(
 }
 
 @Composable
-private fun currentRoute(navController: NavHostController): String? {
+fun currentRoute(navController: NavHostController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.destination?.route
 }
@@ -47,32 +52,44 @@ private fun currentRoute(navController: NavHostController): String? {
 @Composable
 private fun RowScope.BottomNavigationTab(
     screen: BottomNavigationScreens,
-    switchBottomTab: (String,String) -> Unit,
-    navController: NavHostController
+    switchBottomTab: (String, String) -> Unit,
+    currentRoute: String?
 ) {
-    val currentRoute = currentRoute(navController)
-
     BottomNavigationItem(
         icon = {
-            when (currentRoute) {
-                screen.route -> {
-                    Icon(
-                        painterResource(screen.icon),
-                        contentDescription = null,
-                    )
-                }
-                else -> {
-                    Icon(
-                        painterResource(screen.iconStroke),
-                        contentDescription = null,
-                    )
-                }
-            }
+            ComposeBottomNavIconState(currentRoute, screen)
         },
-        selected = currentRoute == screen.route,
+        selected = isSelected(currentRoute, screen),
         alwaysShowLabel = true,
         onClick = {
             currentRoute?.let { switchBottomTab(screen.route, it) }
         }
     )
+}
+
+@Composable
+private fun isSelected(
+    currentRoute: String?,
+    screen: BottomNavigationScreens
+) = currentRoute == screen.route || currentRoute?.contains(screen.route) == true
+
+@Composable
+private fun ComposeBottomNavIconState(
+    currentRoute: String?,
+    screen: BottomNavigationScreens
+) {
+    when  {
+        isSelected(currentRoute = currentRoute, screen = screen) -> {
+            Icon(
+                painterResource(screen.icon),
+                contentDescription = null,
+            )
+        }
+        else -> {
+            Icon(
+                painterResource(screen.iconStroke),
+                contentDescription = null,
+            )
+        }
+    }
 }

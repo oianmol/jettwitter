@@ -43,7 +43,7 @@ fun TwitterDetailsScreen(
                     tweet = tweetState.data, tweetsViewModel = viewModel,
                     onClickTweet = {
 
-                    },hashTagNavigator =hashTagNavigator
+                    }, hashTagNavigator = hashTagNavigator
                 )
             }
         }
