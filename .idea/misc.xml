@@ -35,6 +35,8 @@
         <entry key="app/src/main/res/drawable/ic_vector_arrow_down.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/drawable/ic_vector_heart_stroke.xml" value="0.15648148148148147" />
         <entry key="app/src/main/res/drawable/ic_vector_overflow.xml" value="0.34074074074074073" />
+        <entry key="app/src/main/res/drawable/ic_vector_plus_bubble.xml" value="0.10462962962962963" />
+        <entry key="app/src/main/res/drawable/ic_vector_reply.xml" value="0.10462962962962963" />
         <entry key="app/src/main/res/drawable/ic_vector_retweet_stroke.xml" value="0.15648148148148147" />
         <entry key="app/src/main/res/drawable/ic_vector_share_android.xml" value="0.15648148148148147" />
         <entry key="app/src/main/res/font/chirp_font_family.xml" value="0.43385416666666665" />

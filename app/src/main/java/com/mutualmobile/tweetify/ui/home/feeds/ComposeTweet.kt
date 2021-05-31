@@ -88,7 +88,7 @@ private fun ComposeTweetColumn(
 fun ComposeFooter(tweet: Tweet) {
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painterResource(id = R.drawable.ic_vector_heart_stroke), contentDescription = null)
+            Icon(painterResource(id = R.drawable.ic_vector_reply), contentDescription = null)
             Text(text = tweet.tCommentCount.toString(), modifier = Modifier.padding(start = 4.dp))
         }
         Row(modifier = Modifier.padding(4.dp)) {
