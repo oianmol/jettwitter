@@ -2,6 +2,10 @@ package com.mutualmobile.tweetify.ui.home.bottomnavigation
 
 import com.mutualmobile.tweetify.R
 
+sealed class TwitterNavigationScreen(val route: String) {
+    object TweetDetailScreen : TwitterNavigationScreen("TweetDetail")
+}
+
 sealed class BottomNavigationScreens(
     val route: String,
     val icon: Int,

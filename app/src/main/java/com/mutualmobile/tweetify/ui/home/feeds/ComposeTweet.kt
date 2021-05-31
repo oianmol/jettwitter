@@ -3,6 +3,7 @@ package com.mutualmobile.tweetify.ui.home.feeds
 import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,8 +30,10 @@ import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
-fun ComposeTweet(tweet: Tweet, tweetsViewModel: TweetsViewModel) {
-    TweetifySurface {
+fun ComposeTweet(tweet: Tweet, tweetsViewModel: TweetsViewModel, onClickTweet: (Tweet) -> Unit) {
+    TweetifySurface(modifier = Modifier.clickable {
+        onClickTweet.invoke(tweet)
+    }) {
         Column {
             Row(modifier = Modifier.padding(12.dp)) {
                 RoundedUserImage(url = tweet.tUImage)
@@ -55,6 +58,29 @@ private fun ComposeTweetColumn(tweet: Tweet, tweetsViewModel: TweetsViewModel) {
         })
         Spacer(modifier = Modifier.height(8.dp))
         ComposeTweetMetadata(tweet)
+        ComposeFooter(tweet)
+    }
+}
+
+@Composable
+fun ComposeFooter(tweet: Tweet) {
+    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(4.dp)) {
+            Icon(painterResource(id = R.drawable.ic_vector_heart_stroke), contentDescription = null)
+            Text(text = tweet.tCommentCount.toString(), modifier = Modifier.padding(start = 4.dp))
+        }
+        Row(modifier = Modifier.padding(4.dp)) {
+            Icon(painterResource(id = R.drawable.ic_vector_retweet_stroke), contentDescription = null)
+            Text(text = tweet.tRTCount.toString(), modifier = Modifier.padding(start = 4.dp))
+        }
+        Row(modifier = Modifier.padding(4.dp)) {
+            Icon(painterResource(id = R.drawable.ic_vector_heart_stroke), contentDescription = null)
+            Text(text = tweet.tLikeCount.toString(), modifier = Modifier.padding(start = 4.dp))
+        }
+        Row(modifier = Modifier.padding(4.dp)) {
+            Icon(painterResource(id = R.drawable.ic_vector_share_android), contentDescription = null)
+        }
+
     }
 }
 

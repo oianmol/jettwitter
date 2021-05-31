@@ -37,7 +37,7 @@ fun TweetifyApp(finishActivity: () -> Unit) {
             color = TweetifyTheme.colors.statusBarColor.copy(alpha = AlphaNearTransparent),
             modifier = Modifier.fillMaxSize()
         ) {
-            TweetifyScaffold(scaffoldState, navController)
+            TweetifyScaffold(scaffoldState, navController, finishActivity)
         }
     }
 }

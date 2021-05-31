@@ -12,16 +12,16 @@ class TweetsViewModel : ViewModel() {
     var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
         private set
 
-
     private val repository = TweetsRepository()
 
     init {
+        tweetsState = TweetState.Loading
         fetchTweets()
     }
 
     private fun fetchTweets() {
         viewModelScope.launch {
-            val tweets = repository.fetch()
+            val tweets = repository.fetchAsync()
             tweetsState = TweetState.Success(tweets)
         }
     }

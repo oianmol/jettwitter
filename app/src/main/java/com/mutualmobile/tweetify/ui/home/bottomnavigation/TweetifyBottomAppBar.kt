@@ -1,12 +1,14 @@
 package com.mutualmobile.tweetify.ui.home.bottomnavigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.navigation.NavHostController
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 
 val bottomNavigationItems = listOf(
@@ -18,6 +20,7 @@ val bottomNavigationItems = listOf(
 
 @Composable
 fun TweetifyBottomAppBar(
+    switchBottomTab: (String) -> Unit,
     navController: NavHostController
 ) {
     TweetifySurface(
@@ -25,27 +28,31 @@ fun TweetifyBottomAppBar(
         contentColor = TweetifyTheme.colors.accent,
         elevation = 8.dp
     ) {
-        var selectedIndex by remember { mutableStateOf(0) }
-
         BottomNavigation(backgroundColor = TweetifyTheme.colors.uiBackground, elevation = 4.dp) {
-            bottomNavigationItems.forEachIndexed { index, screen ->
-                BottomNavigationTab(selectedIndex, index, screen, navController)
+            bottomNavigationItems.forEach { screen ->
+                BottomNavigationTab(screen, switchBottomTab, navController)
             }
         }
     }
 }
 
 @Composable
+private fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination?.route
+}
+
+@Composable
 private fun RowScope.BottomNavigationTab(
-    selectedIndex: Int,
-    index: Int,
     screen: BottomNavigationScreens,
+    switchBottomTab: (String) -> Unit,
     navController: NavHostController
 ) {
-    var selectedIndex1 = selectedIndex
+    val currentRoute = currentRoute(navController)
+
     BottomNavigationItem(
         icon = {
-            if (selectedIndex1 == index) {
+            if (currentRoute == screen.route) {
                 Icon(
                     painterResource(screen.icon),
                     contentDescription = null,
@@ -58,15 +65,10 @@ private fun RowScope.BottomNavigationTab(
             }
 
         },
-        selected = selectedIndex1 == index,
-        alwaysShowLabel = false,
+        selected = currentRoute == screen.route,
+        alwaysShowLabel = true,
         onClick = {
-            // This if check gives us a "singleTop" behavior where we do not create a
-            // second instance of the composable if we are already on that destination
-            if (selectedIndex1 != index) {
-                navController.navigate(screen.route)
-                selectedIndex1 = index
-            }
+            switchBottomTab(screen.route)
         }
     )
 }
