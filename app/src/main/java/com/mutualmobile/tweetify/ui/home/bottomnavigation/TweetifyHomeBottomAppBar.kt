@@ -1,6 +1,5 @@
 package com.mutualmobile.tweetify.ui.home.bottomnavigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -19,18 +18,21 @@ val bottomNavigationItems = listOf(
 )
 
 @Composable
-fun TweetifyBottomAppBar(
-    switchBottomTab: (String) -> Unit,
-    navController: NavHostController
+fun TweetifyHomeBottomAppBar(
+    switchBottomTab: (String, String) -> Unit,
+    navController: NavHostController,
+    shouldShowAppBar: Boolean
 ) {
-    TweetifySurface(
-        color = TweetifyTheme.colors.uiBackground,
-        contentColor = TweetifyTheme.colors.accent,
-        elevation = 8.dp
-    ) {
-        BottomNavigation(backgroundColor = TweetifyTheme.colors.uiBackground, elevation = 4.dp) {
-            bottomNavigationItems.forEach { screen ->
-                BottomNavigationTab(screen, switchBottomTab, navController)
+    if(shouldShowAppBar){
+        TweetifySurface(
+            color = TweetifyTheme.colors.uiBackground,
+            contentColor = TweetifyTheme.colors.accent,
+            elevation = 8.dp
+        ) {
+            BottomNavigation(backgroundColor = TweetifyTheme.colors.uiBackground, elevation = 4.dp) {
+                bottomNavigationItems.forEach { screen ->
+                    BottomNavigationTab(screen, switchBottomTab, navController)
+                }
             }
         }
     }
@@ -45,30 +47,32 @@ private fun currentRoute(navController: NavHostController): String? {
 @Composable
 private fun RowScope.BottomNavigationTab(
     screen: BottomNavigationScreens,
-    switchBottomTab: (String) -> Unit,
+    switchBottomTab: (String,String) -> Unit,
     navController: NavHostController
 ) {
     val currentRoute = currentRoute(navController)
 
     BottomNavigationItem(
         icon = {
-            if (currentRoute == screen.route) {
-                Icon(
-                    painterResource(screen.icon),
-                    contentDescription = null,
-                )
-            } else {
-                Icon(
-                    painterResource(screen.iconStroke),
-                    contentDescription = null,
-                )
+            when (currentRoute) {
+                screen.route -> {
+                    Icon(
+                        painterResource(screen.icon),
+                        contentDescription = null,
+                    )
+                }
+                else -> {
+                    Icon(
+                        painterResource(screen.iconStroke),
+                        contentDescription = null,
+                    )
+                }
             }
-
         },
         selected = currentRoute == screen.route,
         alwaysShowLabel = true,
         onClick = {
-            switchBottomTab(screen.route)
+            currentRoute?.let { switchBottomTab(screen.route, it) }
         }
     )
 }

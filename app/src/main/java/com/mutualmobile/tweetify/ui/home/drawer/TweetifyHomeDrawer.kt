@@ -12,7 +12,7 @@ import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
-fun TweetifyDrawer() {
+fun TweetifyHomeDrawer() {
     TweetifySurface(
         color = TweetifyTheme.colors.uiBackground,
         modifier = Modifier
@@ -42,7 +42,7 @@ fun DrawerFooter() {
 @Composable
 fun PreviewDrawer(){
    TweetifyTheme {
-       TweetifyDrawer()
+       TweetifyHomeDrawer()
    }
 }
 
@@ -52,7 +52,7 @@ fun PreviewDrawer(){
 @Composable
 fun PreviewDrawerDark(){
     TweetifyTheme(darkTheme = true) {
-        TweetifyDrawer()
+        TweetifyHomeDrawer()
     }
 }
 

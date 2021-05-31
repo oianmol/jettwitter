@@ -2,7 +2,6 @@ package com.mutualmobile.tweetify.ui.home.feeds.data
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -124,7 +123,6 @@ class TweetsRepository {
     }
 
     suspend fun fetchAsync(): List<Tweet> {
-        delay(2000)
         return tweetsList
     }
 

@@ -17,6 +17,8 @@ sealed class TweetState {
     object Loading : TweetState()
     object Failure : TweetState()
     class Success(var data: List<Tweet>) : TweetState()
+    class SuccessTweet(var data: Tweet) : TweetState()
+
 }
 
 data class TweetUrlMeta(

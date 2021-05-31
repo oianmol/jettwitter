@@ -9,9 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
-import com.mutualmobile.tweetify.ui.home.bottomnavigation.TwitterNavigationScreen
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweetAdvertisementBanner
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweet
 import com.mutualmobile.tweetify.ui.home.feeds.data.TweetState
@@ -24,10 +22,12 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 @Composable
 fun HomeScreen(
     tweetsViewModel: TweetsViewModel = TweetsViewModel(),
-    navigateToTweet: (String) -> Unit?
+    navigateToTweet: (String) -> Unit?,
+    modifierPadding: PaddingValues
 ) {
     val tweetState = tweetsViewModel.tweetsState
-    TweetifySurface(Modifier.fillMaxSize()) {
+
+    TweetifySurface(modifier = Modifier.fillMaxSize().padding(modifierPadding)) {
         LazyColumn {
             item {
                 ComposeStoriesWithSpacing()
@@ -89,26 +89,6 @@ private fun ComposeStoriesWithSpacing() {
         Spacer(modifier = Modifier.height(2.dp))
         ComposeStoriesHome(UserStoriesRepository.fetchStories())
         Spacer(modifier = Modifier.height(2.dp))
-    }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    TweetifyTheme {
-        HomeScreen(navigateToTweet = {
-
-        })
-    }
-}
-
-@Preview("Dark")
-@Composable
-fun HomeScreenPreviewDark() {
-    TweetifyTheme(darkTheme = true) {
-        HomeScreen(navigateToTweet = {
-
-        })
     }
 }
 

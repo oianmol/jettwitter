@@ -1,29 +1,23 @@
 package com.mutualmobile.tweetify.ui.home
 
-import androidx.compose.material.DrawerDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import com.mutualmobile.tweetify.ui.home.bottomnavigation.TweetifyBottomAppBar
-import com.mutualmobile.tweetify.ui.home.drawer.TweetifyDrawer
+import com.mutualmobile.tweetify.ui.home.bottomnavigation.TweetifyHomeBottomAppBar
+import com.mutualmobile.tweetify.ui.home.drawer.TweetifyHomeDrawer
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun TweetifyScaffold(
-    scaffoldState: ScaffoldState,
-    navController: NavHostController,
-    finishActivity: () -> Unit
-) {
-
+fun TweetifyScaffold() {
+    val navController = rememberNavController()
+    val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val (shouldShowAppBar, updateAppBarVisibility) = remember { mutableStateOf(true) }
     val navActions = remember(navController) { MainActions(navController, updateAppBarVisibility) }
 
@@ -32,9 +26,9 @@ fun TweetifyScaffold(
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),
-        topBar = { TweetifyTopBar(scaffoldState, shouldShowAppBar) },
-        drawerContent = { TweetifyDrawer() },
-        bottomBar = { TweetifyBottomAppBar(navActions.switchBottomTab,navController) },
+        topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar) },
+        drawerContent = { TweetifyHomeDrawer() },
+        bottomBar = { TweetifyHomeBottomAppBar(navActions.switchBottomTab, navController,shouldShowAppBar) },
         drawerShape = MaterialTheme.shapes.medium,
         drawerElevation = DrawerDefaults.Elevation,
         drawerBackgroundColor = TweetifyTheme.colors.uiBackground,
@@ -47,15 +41,14 @@ fun TweetifyScaffold(
             navController,
             padding,
             shouldShowAppBar = updateAppBarVisibility,
-            navAction = navActions,
-            finishActivity = finishActivity
+            navAction = navActions
         )
     }
 }
 
 
 @Composable
-private fun TweetifyTopBar(
+private fun TweetifyHomeTopBar(
     scaffoldState: ScaffoldState,
     shouldShowAppBar: Boolean
 ) {

@@ -9,7 +9,11 @@ import kotlinx.coroutines.launch
 
 class TweetsViewModel : ViewModel() {
 
+    private var tweetId: String? = null
     var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
+        private set
+
+    var tweetByIdState by mutableStateOf<TweetState>(TweetState.Loading)
         private set
 
     private val repository = TweetsRepository()
@@ -22,6 +26,11 @@ class TweetsViewModel : ViewModel() {
     private fun fetchTweets() {
         viewModelScope.launch {
             val tweets = repository.fetchAsync()
+            tweetId?.let { tweetId ->
+                tweets.firstOrNull { it.tUid == tweetId }?.let {
+                    tweetByIdState = TweetState.SuccessTweet(it)
+                }
+            }
             tweetsState = TweetState.Success(tweets)
         }
     }
@@ -32,5 +41,10 @@ class TweetsViewModel : ViewModel() {
             tweet.metadata = meta
             fetchTweets()
         }
+    }
+
+    fun fetchById(tweetId: String?) {
+        this.tweetId = tweetId
+        fetchTweets()
     }
 }
