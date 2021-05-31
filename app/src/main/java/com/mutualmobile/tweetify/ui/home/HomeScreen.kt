@@ -7,7 +7,6 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweetAdvertisementBanner
@@ -23,11 +22,14 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 fun HomeScreen(
     tweetsViewModel: TweetsViewModel = TweetsViewModel(),
     navigateToTweet: (String) -> Unit?,
-    modifierPadding: PaddingValues
+    modifierPadding: PaddingValues,
+    navigateToHashTagSearch: (String) -> Unit?
 ) {
     val tweetState = tweetsViewModel.tweetsState
 
-    TweetifySurface(modifier = Modifier.fillMaxSize().padding(modifierPadding)) {
+    TweetifySurface(modifier = Modifier
+        .fillMaxSize()
+        .padding(modifierPadding)) {
         LazyColumn {
             item {
                 ComposeStoriesWithSpacing()
@@ -47,9 +49,14 @@ fun HomeScreen(
                 is TweetState.Success -> {
                     item {
                         tweetState.data.forEach {
-                            ComposeTweet(it, tweetsViewModel) { tweet ->
-                                navigateToTweet(tweet.tUid)
-                            }
+                            ComposeTweet(
+                                it, tweetsViewModel,
+                                { tweet ->
+                                    navigateToTweet(tweet.tUid)
+                                }, hashTagNavigator = { hashTag ->
+                                    navigateToHashTagSearch.invoke(hashTag)
+                                }
+                            )
                         }
                     }
                 }

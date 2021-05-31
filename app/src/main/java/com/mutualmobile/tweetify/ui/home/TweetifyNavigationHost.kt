@@ -8,6 +8,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
+import com.mutualmobile.tweetify.ui.home.DestinationsArguments.HASH_TAG_KEY
 import com.mutualmobile.tweetify.ui.home.DestinationsArguments.TWEET_ID_KEY
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.BottomNavigationScreens
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.TwitterNavigationScreen
@@ -30,7 +31,7 @@ fun TweetifyNavigationHost(
         // Tweet Detail
         ComposeTweetDetailNavigation(navAction, navController, shouldShowAppBar)
 
-        bottomTabs(navAction,padding)
+        bottomTabs(navAction, padding)
     }
 }
 
@@ -51,7 +52,8 @@ private fun NavGraphBuilder.ComposeTweetDetailNavigation(
             tweetId = backStackEntry.arguments?.getString(TWEET_ID_KEY),
             onBack = {
                 actions.upPress(backStackEntry, shouldShowAppBar)
-            })
+            }, hashTagNavigator = actions.navigateToSearch
+        )
     }
 }
 
@@ -59,26 +61,47 @@ private fun NavGraphBuilder.bottomTabs(
     actions: MainActions,
     padding: PaddingValues
 ) {
-    composable(BottomNavigationScreens.Home.route) {
-        HomeScreen(navigateToTweet = { tweetId ->
-            actions.navigateToTweet(tweetId, it)
-        },modifierPadding=padding)
+    composable(BottomNavigationScreens.Home.route) { backStack ->
+        HomeScreen(
+            navigateToTweet = { tweetId ->
+                actions.navigateToTweet(tweetId, backStack)
+            },
+            modifierPadding = padding, navigateToHashTagSearch = { hashTagSearchParam ->
+                actions.navigateToSearch(hashTagSearchParam)
+            }
+        )
     }
+
+    composable(
+        "${BottomNavigationScreens.Search.route}/{$HASH_TAG_KEY}",
+        arguments = listOf(navArgument(HASH_TAG_KEY) { type = NavType.StringType })
+    ) {
+        SearchScreen(
+            modifierPadding = padding,
+            hashTagParam = it.arguments?.getString(HASH_TAG_KEY)
+        )
+    }
+
     composable(BottomNavigationScreens.Search.route) {
-        SearchScreen(modifierPadding=padding)
+        SearchScreen(
+            modifierPadding = padding,
+            hashTagParam = it.arguments?.getString(HASH_TAG_KEY)
+        )
     }
+
     composable(BottomNavigationScreens.Notifications.route) {
-        NotificationScreen(modifierPadding=padding)
+        NotificationScreen(modifierPadding = padding)
     }
     composable(BottomNavigationScreens.Messages.route) {
-        MessagesScreen(modifierPadding=padding)
+        MessagesScreen(modifierPadding = padding)
     }
 
 }
 
 object DestinationsArguments {
     const val TWEET_ID_KEY = "tweetId"
-    const val MAIN_ROUTE = "main"
+    const val HASH_TAG_KEY = "hashTagParam"
+
 }
 
 /**
@@ -92,6 +115,12 @@ class MainActions(
         if (from.lifecycleIsResumed()) {
             shouldShowAppBar(false)
             navController.navigate(route = "${TwitterNavigationScreen.TweetDetailScreen.route}/$tweetId")
+        }
+    }
+
+    val navigateToSearch = { hashTag: String ->
+        navController.navigate(route = "${BottomNavigationScreens.Search.route}/$hashTag") {
+            popUpTo(navController.graph.startDestinationId)
         }
     }
 

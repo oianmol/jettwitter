@@ -4,15 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import com.mutualmobile.tweetify.R
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweet
 import com.mutualmobile.tweetify.ui.home.feeds.data.TweetState
@@ -23,7 +20,8 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 fun TwitterDetailsScreen(
     tweetId: String?,
     onBack: () -> Unit,
-    viewModel: TweetsViewModel = TweetsViewModel()
+    viewModel: TweetsViewModel = TweetsViewModel(),
+    hashTagNavigator: (String) -> Unit
 ) {
     viewModel.fetchById(tweetId)
     val tweetState = viewModel.tweetByIdState
@@ -41,9 +39,12 @@ fun TwitterDetailsScreen(
                     onBack.invoke()
                 }
                 .padding(paddingExtras)) {
-                ComposeTweet(tweet = tweetState.data, tweetsViewModel = viewModel) {
+                ComposeTweet(
+                    tweet = tweetState.data, tweetsViewModel = viewModel,
+                    onClickTweet = {
 
-                }
+                    },hashTagNavigator =hashTagNavigator
+                )
             }
         }
     }

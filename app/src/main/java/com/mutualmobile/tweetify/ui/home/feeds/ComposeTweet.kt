@@ -30,7 +30,12 @@ import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
-fun ComposeTweet(tweet: Tweet, tweetsViewModel: TweetsViewModel, onClickTweet: (Tweet) -> Unit) {
+fun ComposeTweet(
+    tweet: Tweet,
+    tweetsViewModel: TweetsViewModel,
+    onClickTweet: (Tweet) -> Unit,
+    hashTagNavigator: (String) -> Unit
+) {
     TweetifySurface(modifier = Modifier.clickable {
         onClickTweet.invoke(tweet)
     }) {
@@ -38,7 +43,12 @@ fun ComposeTweet(tweet: Tweet, tweetsViewModel: TweetsViewModel, onClickTweet: (
             Row(modifier = Modifier.padding(12.dp)) {
                 RoundedUserImage(url = tweet.tUImage)
                 Spacer(modifier = Modifier.width(14.dp))
-                ComposeTweetColumn(tweet, tweetsViewModel)
+                ComposeTweetColumn(
+                    tweet,
+                    tweetsViewModel,
+                    hashTagNavigator = hashTagNavigator,
+                    onClickTweet
+                )
             }
             Divider(color = Color.Gray.copy(AlphaNearOpaque), thickness = 0.5.dp)
         }
@@ -46,16 +56,28 @@ fun ComposeTweet(tweet: Tweet, tweetsViewModel: TweetsViewModel, onClickTweet: (
 }
 
 @Composable
-private fun ComposeTweetColumn(tweet: Tweet, tweetsViewModel: TweetsViewModel) {
+private fun ComposeTweetColumn(
+    tweet: Tweet,
+    tweetsViewModel: TweetsViewModel,
+    hashTagNavigator: (String) -> Unit,
+    onClickTweet: (Tweet) -> Unit
+) {
     Column {
         ComposeNameHandlerOverflow(tweet)
         ComposeTime(tweet)
         Spacer(modifier = Modifier.height(8.dp))
-        ComposeTweetifyFeedText(tweet.tUText, urlRecognizer = { url ->
-            if (tweet.metadata == null) {
-                tweetsViewModel.loadMetadata(tweet, url)
+        ComposeTweetifyFeedText(
+            tweet.tUText,
+            urlRecognizer = { url ->
+                if (tweet.metadata == null) {
+                    tweetsViewModel.loadMetadata(tweet, url)
+                }
+            },
+            hashTagNavigator = hashTagNavigator,
+            textClick = {
+                onClickTweet.invoke(tweet)
             }
-        })
+        )
         Spacer(modifier = Modifier.height(8.dp))
         ComposeTweetMetadata(tweet)
         ComposeFooter(tweet)
@@ -70,7 +92,10 @@ fun ComposeFooter(tweet: Tweet) {
             Text(text = tweet.tCommentCount.toString(), modifier = Modifier.padding(start = 4.dp))
         }
         Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painterResource(id = R.drawable.ic_vector_retweet_stroke), contentDescription = null)
+            Icon(
+                painterResource(id = R.drawable.ic_vector_retweet_stroke),
+                contentDescription = null
+            )
             Text(text = tweet.tRTCount.toString(), modifier = Modifier.padding(start = 4.dp))
         }
         Row(modifier = Modifier.padding(4.dp)) {
@@ -78,7 +103,10 @@ fun ComposeFooter(tweet: Tweet) {
             Text(text = tweet.tLikeCount.toString(), modifier = Modifier.padding(start = 4.dp))
         }
         Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painterResource(id = R.drawable.ic_vector_share_android), contentDescription = null)
+            Icon(
+                painterResource(id = R.drawable.ic_vector_share_android),
+                contentDescription = null
+            )
         }
 
     }

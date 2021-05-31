@@ -23,7 +23,9 @@ const val URL_TAG = "URL"
 fun ComposeTweetifyFeedText(
     text: String,
     modifier: Modifier = Modifier,
-    urlRecognizer: (url: String) -> Unit
+    urlRecognizer: (url: String) -> Unit,
+    hashTagNavigator: (String) -> Unit,
+    textClick: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
     val layoutResult = remember {
@@ -60,12 +62,20 @@ fun ComposeTweetifyFeedText(
                     val position = it.getOffsetForPosition(offsetPosition)
                     annotatedString.getStringAnnotations(position, position).firstOrNull()
                         ?.let { result ->
-                            if (result.tag == URL_TAG) {
-                                uriHandler.openUri(result.item)
-                            } else {
-
+                            when (result.tag) {
+                                URL_TAG -> {
+                                    uriHandler.openUri(result.item)
+                                }
+                                HASH_TAG -> {
+                                    hashTagNavigator.invoke(result.item)
+                                }
+                                else -> {
+                                    textClick.invoke()
+                                }
                             }
                         }
+                } ?: run {
+                    textClick.invoke()
                 }
             }
         },
