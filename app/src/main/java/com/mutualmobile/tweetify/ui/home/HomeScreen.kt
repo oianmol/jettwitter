@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweetAdvertisementBanner
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweet
@@ -20,7 +21,7 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
 fun HomeScreen(
-    tweetsViewModel: TweetsViewModel = TweetsViewModel(),
+    tweetsViewModel: TweetsViewModel = viewModel(),
     navigateToTweet: (String) -> Unit?,
     modifierPadding: PaddingValues,
     navigateToHashTagSearch: (String) -> Unit?

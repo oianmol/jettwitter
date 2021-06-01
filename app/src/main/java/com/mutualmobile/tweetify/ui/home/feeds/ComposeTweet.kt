@@ -37,6 +37,7 @@ fun ComposeTweet(
     hashTagNavigator: (String) -> Unit
 ) {
     TweetifySurface(modifier = Modifier.clickable {
+        tweetsViewModel.tweetId = tweet.tUid
         onClickTweet.invoke(tweet)
     }) {
         Column {
@@ -114,7 +115,8 @@ fun ComposeFooter(tweet: Tweet) {
 
 @Composable
 fun ComposeTweetMetadata(tweet: Tweet) {
-    tweet.metadata?.let { tweetUrlMeta ->
+    if (tweet.metadata != null && tweet.metadata?.title != null) {
+        val tweetUrlMeta = tweet.metadata!!
         TweetifySurface(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.border(
@@ -134,8 +136,8 @@ fun ComposeTweetMetadata(tweet: Tweet) {
                         .height(180.dp)
                         .fillMaxWidth(), contentScale = ContentScale.Crop
                 )
-                ComposeMetadataFooter(tweetUrlMeta.title ?: tweet.tUName,
-                    tweetUrlMeta.desc ?: tweet.tUText,
+                ComposeMetadataFooter(tweetUrlMeta.title!!,
+                    tweetUrlMeta.desc!!,
                     modifier = Modifier
                         .constrainAs(footer) {
                             bottom.linkTo(image.bottom, margin = 0.dp)

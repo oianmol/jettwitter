@@ -1,5 +1,6 @@
 package com.mutualmobile.tweetify.ui.home.feeds.data
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,9 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class TweetsViewModel : ViewModel() {
+class TweetsViewModel(var tweetId: String? = null) : ViewModel() {
 
-    private var tweetId: String? = null
     var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
         private set
 
@@ -21,6 +21,7 @@ class TweetsViewModel : ViewModel() {
     init {
         tweetsState = TweetState.Loading
         fetchTweets()
+        Log.e("vm","fetch tweets")
     }
 
     private fun fetchTweets() {
@@ -41,10 +42,5 @@ class TweetsViewModel : ViewModel() {
             tweet.metadata = meta
             fetchTweets()
         }
-    }
-
-    fun fetchById(tweetId: String?) {
-        this.tweetId = tweetId
-        fetchTweets()
     }
 }
