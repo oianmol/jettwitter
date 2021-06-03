@@ -33,10 +33,7 @@ fun TwitterDetailsScreen(
         contentColor = TweetifyTheme.colors.textSecondary,
     ) { paddingExtras ->
         if (tweetState is TweetState.SuccessTweet) {
-            TweetifySurface(modifier = Modifier
-                .clickable {
-                    onBack.invoke()
-                }
+            TweetifySurface(modifier = Modifier.clickable { onBack.invoke() }
                 .padding(paddingExtras)) {
                 ComposeTweet(
                     tweet = tweetState.data, tweetsViewModel = tweetViewModel,

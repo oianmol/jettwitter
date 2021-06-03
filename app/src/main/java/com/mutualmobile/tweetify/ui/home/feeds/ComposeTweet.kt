@@ -18,6 +18,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.coil.rememberCoilPainter
@@ -115,11 +116,15 @@ fun ComposeFooter(tweet: Tweet) {
 
 @Composable
 fun ComposeTweetMetadata(tweet: Tweet) {
+    val uriHandler = LocalUriHandler.current
+
     if (tweet.metadata != null && tweet.metadata?.title != null) {
         val tweetUrlMeta = tweet.metadata!!
         TweetifySurface(
             shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.border(
+            modifier = Modifier.clickable {
+                tweet.metadata?.url?.let { uriHandler.openUri(it) }
+            }.border(
                 2.dp,
                 TweetifyTheme.colors.uiBorder,
                 RoundedCornerShape(12.dp)
