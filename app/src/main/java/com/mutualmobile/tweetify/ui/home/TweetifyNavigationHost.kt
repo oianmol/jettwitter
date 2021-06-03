@@ -2,6 +2,7 @@ package com.mutualmobile.tweetify.ui.home
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.*
@@ -18,6 +19,8 @@ import com.mutualmobile.tweetify.ui.home.feeds.tweetdetails.TwitterDetailsScreen
 import com.mutualmobile.tweetify.ui.messages.MessagesScreen
 import com.mutualmobile.tweetify.ui.notifications.NotificationScreen
 import com.mutualmobile.tweetify.ui.search.SearchScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun TweetifyNavigationHost(
@@ -80,6 +83,9 @@ private fun NavGraphBuilder.bottomTabs(
                 actions.navigateToSearch(hashTagSearchParam)
             }
         )
+        BackHandler {
+            actions.drawerCheck()
+        }
     }
 
     composable(
@@ -90,6 +96,9 @@ private fun NavGraphBuilder.bottomTabs(
             modifierPadding = padding,
             hashTagParam = it.arguments?.getString(HASH_TAG_KEY)
         )
+        BackHandler {
+            actions.drawerCheck()
+        }
     }
 
     composable(BottomNavigationScreens.Search.route) {
@@ -97,13 +106,22 @@ private fun NavGraphBuilder.bottomTabs(
             modifierPadding = padding,
             hashTagParam = it.arguments?.getString(HASH_TAG_KEY)
         )
+        BackHandler {
+            actions.drawerCheck()
+        }
     }
 
     composable(BottomNavigationScreens.Notifications.route) {
         NotificationScreen(modifierPadding = padding)
+        BackHandler {
+            actions.drawerCheck()
+        }
     }
     composable(BottomNavigationScreens.Messages.route) {
         MessagesScreen(modifierPadding = padding)
+        BackHandler {
+            actions.drawerCheck()
+        }
     }
 
 }
@@ -119,8 +137,21 @@ object DestinationsArguments {
  */
 class MainActions(
     private val navController: NavHostController,
-    private val shouldShowAppBar: (Boolean) -> Unit
+    private val shouldShowAppBar: (Boolean) -> Unit,
+    private val scaffoldState: ScaffoldState,
+    private val scope: CoroutineScope,
 ) {
+
+    fun drawerCheck() {
+        if (scaffoldState.drawerState.isOpen) {
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+        } else {
+            navController.navigateUp()
+        }
+    }
+
     val navigateToTweet = { tweetId: String, from: NavBackStackEntry ->
         if (from.lifecycleIsResumed()) {
             shouldShowAppBar(false)

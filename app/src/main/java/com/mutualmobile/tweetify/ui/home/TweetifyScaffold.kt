@@ -12,6 +12,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.TweetifyHomeBottomAppBar
 import com.mutualmobile.tweetify.ui.home.drawer.TweetifyHomeDrawer
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -19,14 +20,16 @@ fun TweetifyScaffold() {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val (shouldShowAppBar, updateAppBarVisibility) = remember { mutableStateOf(true) }
-    val navActions = remember(navController) { MainActions(navController, updateAppBarVisibility) }
+    val scope = rememberCoroutineScope()
+
+    val navActions = remember(navController) { MainActions(navController, updateAppBarVisibility,scaffoldState,scope) }
 
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),
-        topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar) },
+        topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar,scope) },
         drawerContent = { TweetifyHomeDrawer() },
         bottomBar = {
             TweetifyHomeBottomAppBar(
@@ -56,10 +59,10 @@ fun TweetifyScaffold() {
 @Composable
 private fun TweetifyHomeTopBar(
     scaffoldState: ScaffoldState,
-    shouldShowAppBar: Boolean
+    shouldShowAppBar: Boolean,
+    scope: CoroutineScope
 ) {
     if (shouldShowAppBar) {
-        val scope = rememberCoroutineScope()
         TweetifyTopAppBar {
             scope.launch {
                 if (scaffoldState.drawerState.isOpen) {
