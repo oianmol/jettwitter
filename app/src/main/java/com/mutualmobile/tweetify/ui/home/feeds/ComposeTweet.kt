@@ -66,8 +66,8 @@ private fun ComposeTweetColumn(
     onClickTweet: (Tweet) -> Unit
 ) {
     Column {
-        ComposeNameHandlerOverflow(tweet)
-        ComposeTime(tweet)
+        ComposeNameHandlerOverflow(tweet.tUName,tweet.tUHandler)
+        ComposeTime(tweet.tUTime)
         Spacer(modifier = Modifier.height(8.dp))
         ComposeTweetifyFeedText(
             tweet.tUText,
@@ -180,10 +180,10 @@ fun ComposeMetadataFooter(title: String, desc: String, modifier: Modifier) {
 }
 
 @Composable
-private fun ComposeTime(tweet: Tweet) {
+fun ComposeTime(time: Long) {
     Text(
         DateUtils.getRelativeTimeSpanString(
-            tweet.tUTime,
+            time,
             System.currentTimeMillis(),
             DateUtils.MINUTE_IN_MILLIS
         ).toString(),
@@ -194,19 +194,19 @@ private fun ComposeTime(tweet: Tweet) {
 }
 
 @Composable
-private fun ComposeNameHandlerOverflow(tweet: Tweet) {
+fun ComposeNameHandlerOverflow(name: String, tUHandler: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(modifier = Modifier.fillMaxWidth(0.9f)) {
             Text(
-                tweet.tUName, fontWeight = FontWeight.Bold,
+                name, fontWeight = FontWeight.Bold,
                 color = TweetifyTheme.colors.textPrimary
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                tweet.tUHandler,
+                tUHandler,
                 color = TweetifyTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
