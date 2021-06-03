@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import com.mutualmobile.tweetify.ui.components.ComposeTweetifyFeedText
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
@@ -33,7 +34,7 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 @Composable
 fun ComposeTweet(
     tweet: Tweet,
-    tweetsViewModel: TweetsViewModel,
+    tweetsViewModel: TweetsViewModel = viewModel(),
     onClickTweet: (Tweet) -> Unit,
     hashTagNavigator: (String) -> Unit
 ) {

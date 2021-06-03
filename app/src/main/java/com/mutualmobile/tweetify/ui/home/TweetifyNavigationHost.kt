@@ -9,9 +9,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
-import com.mutualmobile.tweetify.TweetifyApp
 import com.mutualmobile.tweetify.ui.home.DestinationsArguments.HASH_TAG_KEY
-import com.mutualmobile.tweetify.ui.home.DestinationsArguments.MAIN_SCREEN
 import com.mutualmobile.tweetify.ui.home.DestinationsArguments.TWEET_ID_KEY
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.BottomNavigationScreens
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.TwitterNavigationScreen
@@ -34,18 +32,14 @@ fun TweetifyNavigationHost(
         startDestination = BottomNavigationScreens.Home.route,
     ) {
 
-        composable(MAIN_SCREEN) {
-            TweetifyApp()
-        }
-
         // Tweet Detail
-        ComposeTweetDetailNavigation(navAction, navController, shouldShowAppBar)
+        composeTweetDetailNavigation(navAction, navController, shouldShowAppBar)
 
         bottomTabs(navAction, padding)
     }
 }
 
-private fun NavGraphBuilder.ComposeTweetDetailNavigation(
+private fun NavGraphBuilder.composeTweetDetailNavigation(
     actions: MainActions,
     navController: NavHostController,
     shouldShowAppBar: (Boolean) -> Unit
@@ -129,7 +123,6 @@ private fun NavGraphBuilder.bottomTabs(
 object DestinationsArguments {
     const val TWEET_ID_KEY = "tweetId"
     const val HASH_TAG_KEY = "hashTagParam"
-    const val MAIN_SCREEN = "MAIN_SCREEN"
 }
 
 /**
@@ -161,8 +154,8 @@ class MainActions(
 
     fun navigateToSearch(hashTag: String, navigateHomeFirst: Boolean = false) {
         if (navigateHomeFirst) {
-            navController.navigate(MAIN_SCREEN) {
-                launchSingleTop = true
+            while(!navController.navigateUp()){
+                navController.popBackStack()
             }
             shouldShowAppBar(true)
             navController.navigate(route = "${BottomNavigationScreens.Search.route}/$hashTag") {

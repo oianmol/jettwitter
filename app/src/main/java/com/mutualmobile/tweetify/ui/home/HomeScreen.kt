@@ -28,9 +28,11 @@ fun HomeScreen(
 ) {
     val tweetState = tweetsViewModel.tweetsState
 
-    TweetifySurface(modifier = Modifier
-        .fillMaxSize()
-        .padding(modifierPadding)) {
+    TweetifySurface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(modifierPadding)
+    ) {
         LazyColumn {
             item {
                 ComposeStoriesWithSpacing()
@@ -51,7 +53,7 @@ fun HomeScreen(
                     item {
                         tweetState.data.forEach {
                             ComposeTweet(
-                                it, tweetsViewModel,
+                                tweet = it, onClickTweet =
                                 { tweet ->
                                     navigateToTweet(tweet.tUid)
                                 }, hashTagNavigator = { hashTag ->
