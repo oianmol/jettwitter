@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class TweetsViewModel(var tweetId: String? = null) : ViewModel() {
+class TweetsViewModel(var tweetId: String? = "1") : ViewModel() {
 
     var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
         private set

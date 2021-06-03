@@ -22,14 +22,21 @@ fun TweetifyScaffold() {
     val (shouldShowAppBar, updateAppBarVisibility) = remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
 
-    val navActions = remember(navController) { MainActions(navController, updateAppBarVisibility,scaffoldState,scope) }
+    val navActions = remember(navController) {
+        MainActions(
+            navController,
+            updateAppBarVisibility,
+            scaffoldState,
+            scope
+        )
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),
-        topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar,scope) },
+        topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar, scope) },
         drawerContent = { TweetifyHomeDrawer() },
         bottomBar = {
             TweetifyHomeBottomAppBar(
@@ -44,7 +51,7 @@ fun TweetifyScaffold() {
         drawerContentColor = TweetifyTheme.colors.textSecondary,
         drawerScrimColor = TweetifyTheme.colors.uiBorder,
         backgroundColor = TweetifyTheme.colors.uiBackground,
-        contentColor = TweetifyTheme.colors.textSecondary,
+        contentColor = TweetifyTheme.colors.textSecondary
     ) { padding ->
         TweetifyNavigationHost(
             navController,

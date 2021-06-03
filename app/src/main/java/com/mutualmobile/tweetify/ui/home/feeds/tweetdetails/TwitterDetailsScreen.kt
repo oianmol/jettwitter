@@ -27,7 +27,6 @@ fun TwitterDetailsScreen(
     val tweetState = tweetViewModel.tweetByIdState
     Scaffold(
         modifier = Modifier
-            .statusBarsPadding()
             .navigationBarsPadding(),
         topBar = { TwitterDetailsTopBar(onBack) },
         backgroundColor = TweetifyTheme.colors.uiBackground,

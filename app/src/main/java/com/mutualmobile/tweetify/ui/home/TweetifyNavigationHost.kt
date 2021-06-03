@@ -177,7 +177,6 @@ class MainActions(
     }
 
     val switchBottomTab = { tabRoute: String, currentRoute: String ->
-        //shouldShowAppBar(true)
         if (tabRoute != currentRoute) {
             navController.navigate(route = tabRoute) {
                 popUpTo(navController.graph.startDestinationId)
