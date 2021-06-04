@@ -54,7 +54,7 @@ fun MessageItem(twitterMessage: TwitterMessage, onClickMessage: (TwitterMessage)
 @Composable
 fun ComposeMessageColumn(twitterMessage: TwitterMessage, onClickMessage: (TwitterMessage) -> Unit) {
     Column {
-        ComposeNameHandlerOverflow(twitterMessage.fullName, twitterMessage.userName)
+        ComposeNameHandlerOverflow(twitterMessage.fullName, twitterMessage.userName,showOverflow = false)
         ComposeTime(twitterMessage.dateTime)
         Spacer(modifier = Modifier.height(8.dp))
         ComposeTweetifyFeedText(

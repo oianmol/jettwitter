@@ -112,7 +112,9 @@ private fun NavGraphBuilder.bottomTabs(
         }
     }
     composable(BottomNavigationScreens.Messages.route) {
-        MessagesScreen(modifierPadding = padding)
+        MessagesScreen(modifierPadding = padding, onClickMessage = {
+
+        })
         BackHandler {
             actions.drawerCheck()
         }
@@ -154,7 +156,7 @@ class MainActions(
 
     fun navigateToSearch(hashTag: String, navigateHomeFirst: Boolean = false) {
         if (navigateHomeFirst) {
-            while(!navController.navigateUp()){
+            while (!navController.navigateUp()) {
                 navController.popBackStack()
             }
             shouldShowAppBar(true)

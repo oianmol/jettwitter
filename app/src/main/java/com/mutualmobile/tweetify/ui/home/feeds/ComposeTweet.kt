@@ -66,7 +66,7 @@ private fun ComposeTweetColumn(
     onClickTweet: (Tweet) -> Unit
 ) {
     Column {
-        ComposeNameHandlerOverflow(tweet.tUName,tweet.tUHandler)
+        ComposeNameHandlerOverflow(tweet.tUName, tweet.tUHandler, true)
         ComposeTime(tweet.tUTime)
         Spacer(modifier = Modifier.height(8.dp))
         ComposeTweetifyFeedText(
@@ -194,7 +194,7 @@ fun ComposeTime(time: Long) {
 }
 
 @Composable
-fun ComposeNameHandlerOverflow(name: String, tUHandler: String) {
+fun ComposeNameHandlerOverflow(name: String, tUHandler: String, showOverflow: Boolean) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -212,10 +212,12 @@ fun ComposeNameHandlerOverflow(name: String, tUHandler: String) {
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        Icon(
-            painterResource(id = R.drawable.ic_vector_overflow),
-            contentDescription = null,
-            tint = Color.Gray
-        )
+        if(showOverflow){
+            Icon(
+                painterResource(id = R.drawable.ic_vector_overflow),
+                contentDescription = null,
+                tint = Color.Gray
+            )
+        }
     }
 }
