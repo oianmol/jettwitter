@@ -12,7 +12,7 @@ val TextPrimary = Color(0xff202124)
 val TextSecondaryDark = Color(0xff212121)
 val TextSecondary = Color(0xff5f6368)
 val DarkGreen = Color(0xff056449)
-val GreyBg = Color(0xff202125)
+val GreyBg = Color(0xff15202b)
 
 val Shadow1 = Color(0xffded6fe)
 
