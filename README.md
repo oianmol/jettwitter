@@ -11,6 +11,8 @@ A clone of Twitter app in Android built using Jetpack compose.
 
 ### Submission for Compose Hackathon.
 
+Note: This project is only for learning purposes, I do not in anyway want to promote anything that breaks the laws/piracy etc.!
+
 Functionality:
 * Recreated the UI for the basic twitter mobile app UI elements
 * Used Dagger Hilt for the first time.
