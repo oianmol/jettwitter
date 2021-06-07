@@ -19,15 +19,15 @@ class TweetsViewModel @Inject constructor(
         private set
 
     init {
-        tweetsState = TweetState.Loading
         fetchTweets()
         Timber.e("fetch tweets")
     }
 
     private fun fetchTweets() {
         viewModelScope.launch {
+            tweetsState = TweetState.Loading
             val tweets = repository.fetchAsync()
-            delay(3000)
+            delay(500)
             tweetsState = TweetState.Success(tweets)
         }
     }
@@ -36,7 +36,11 @@ class TweetsViewModel @Inject constructor(
         viewModelScope.launch {
             val meta = repository.fetchUrlMatadata(url)
             tweet.metadata = meta
-            fetchTweets()
+            if (tweetsState is TweetState.Success) {
+                (tweetsState as TweetState.Success).data.find { it.tUid == tweet.tUid }?.metadata =
+                    meta
+            }
+            tweetsState = TweetState.Success( (tweetsState as TweetState.Success).data)
         }
     }
 

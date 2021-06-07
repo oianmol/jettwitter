@@ -6,6 +6,7 @@ buildscript {
         compose_version = '1.0.0-beta08'
         dagger_hilt_androidx_version = "1.0.0-alpha03"
         hiltCoreVersion     = '2.36'
+        kotlin_version     = '1.5.10'
         hiltVersion          =  '1.0.0-beta01'
         hiltComposeNavigation  = '1.0.0-alpha02'
     }

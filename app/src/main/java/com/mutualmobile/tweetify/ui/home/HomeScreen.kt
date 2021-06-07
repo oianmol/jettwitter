@@ -23,6 +23,7 @@ import com.mutualmobile.tweetify.ui.home.stories.UserStoriesRepository
 import com.mutualmobile.tweetify.ui.theme.AlphaNearTransparent
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 import com.mutualmobile.tweetify.ui.home.feeds.data.Tweet
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(
@@ -49,6 +50,7 @@ fun HomeScreen(
                 )
             },
             onRefresh = {
+                Timber.e("fetch latest")
                 tweetsViewModel.fetchLatest()
             }, refreshTriggerDistance = 180.dp
         ) {
