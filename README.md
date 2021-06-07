@@ -47,11 +47,9 @@ Messages Tab             |  Side Navigation | Tweet Details
 * [Jetpack Compose]
 * [Accompanist]
 * [Coroutines]
-* [Lottie Compose]
 * [Compose Navigation]
 
 [Jetpack Compose]: https://developer.android.com/jetpack/compose
 [Accompanist]: https://github.com/chrisbanes/accompanist
 [Coroutines]: https://developer.android.com/kotlin/coroutines
-[Lottie Compose]: https://github.com/airbnb/lottie
 [Compose Navigation]: https://developer.android.com/jetpack/compose/navigation
