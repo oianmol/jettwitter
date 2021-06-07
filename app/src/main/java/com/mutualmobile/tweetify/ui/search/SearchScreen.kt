@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
@@ -58,7 +58,7 @@ private fun ScrollableTab(
                 text = {
                     Text(
                         title,
-                        fontFamily = chirpFontFamily,
+
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
                         color = textColor(isSelected(index, selectedTab))

@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
@@ -50,7 +50,7 @@ private fun BannerButton() {
     ) {
         Text(
             text = "Get started",
-            fontFamily = chirpFontFamily,
+
             color = Color.White,
             textAlign = TextAlign.Center,
             fontSize = 16.sp
@@ -63,7 +63,7 @@ private fun BannerSubtitle() {
     Text(
         "Follow relevant accounts with latest information",
 
-        modifier = Modifier.padding(4.dp), fontFamily = chirpFontFamily,
+        modifier = Modifier.padding(4.dp),
         textAlign = TextAlign.Center
     )
 }
@@ -73,7 +73,7 @@ private fun BannerTitle() {
     Text(
         "Do you need help finding COVID-19 resources?",
         modifier = Modifier.padding(4.dp),
-        fontFamily = chirpFontFamily,
+
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
         fontSize = 18.sp

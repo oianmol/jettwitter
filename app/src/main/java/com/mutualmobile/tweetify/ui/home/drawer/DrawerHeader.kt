@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 import com.mutualmobile.tweetify.utils.PHOTO_URL
@@ -74,7 +74,7 @@ fun FollowersFollowing() {
 private fun UserName() {
     Text(
         text = "@_AnmolVerma_",
-        fontFamily = chirpFontFamily,
+
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
     )
@@ -88,7 +88,7 @@ private fun NameDropDown() {
     ) {
         Text(
             text = "Anmol Verma",
-            fontFamily = chirpFontFamily,
+
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = TweetifyTheme.colors.textPrimary

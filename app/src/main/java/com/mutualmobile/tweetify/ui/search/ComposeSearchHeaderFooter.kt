@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTime
 
 @Composable
@@ -31,7 +31,7 @@ fun ComposeSearchHeaderFooter(modifier: Modifier, data: SearchHeader) {
             text = data.title,
             modifier = Modifier.padding(horizontal = 16.dp,vertical = 4.dp),
             fontSize = 16.sp,
-            fontFamily = chirpFontFamily,
+
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,
             color = Color.White
@@ -40,7 +40,7 @@ fun ComposeSearchHeaderFooter(modifier: Modifier, data: SearchHeader) {
             text = data.subtitle,
             modifier = Modifier.padding(horizontal = 16.dp,vertical = 4.dp),
             fontSize = 14.sp,
-            fontFamily = chirpFontFamily,
+
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = Color.White

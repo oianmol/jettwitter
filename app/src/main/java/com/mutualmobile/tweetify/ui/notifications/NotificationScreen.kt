@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.search.textColor
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
@@ -54,7 +54,7 @@ fun NotificationsTab(selectedTab: MutableState<NotificationsTab>, tabTitles: Lis
                 text = {
                     Text(
                         title,
-                        fontFamily = chirpFontFamily,
+
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
                         color = textColor(isSelected(index, selectedTab))

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mutualmobile.tweetify.R
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
@@ -47,7 +47,7 @@ fun TweetifyTopAppBar(shouldShowSearch: Boolean, function: () -> Unit) {
                                     .padding(12.dp)
                                     .fillMaxWidth(),
                                 color = TweetifyTheme.colors.textSecondary,
-                                fontFamily = chirpFontFamily,
+
                                 fontSize = 14.sp
                             )
                         }

@@ -12,15 +12,6 @@ import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.*
 import com.mutualmobile.tweetify.ui.theme.AlphaNearTransparent
 
-val chirpFontFamily = FontFamily(
-    Font(R.font.chirp_bold, FontWeight.Bold),
-    Font(R.font.chirp_heavy, FontWeight.ExtraBold),
-    Font(R.font.chirp_light, FontWeight.Light),
-    Font(R.font.chirp_medium, FontWeight.SemiBold),
-    Font(R.font.chirp_regular, FontWeight.Normal),
-    Font(R.font.chirp_thin, FontWeight.Thin)
-)
-
 @Composable
 fun TweetifyUiMain() {
     ProvideWindowInsets {

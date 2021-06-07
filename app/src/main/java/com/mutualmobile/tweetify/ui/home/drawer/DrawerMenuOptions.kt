@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mutualmobile.tweetify.chirpFontFamily
+
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
@@ -33,7 +33,7 @@ fun DrawerMenuOptions() {
                 Row(modifier = Modifier.padding(14.dp),verticalAlignment = Alignment.CenterVertically) {
                     NavigationIcon(screen)
                     Spacer(modifier = Modifier.width(12.dp))
-                    Text(screen.route, fontFamily = chirpFontFamily,fontSize = 18.sp)
+                    Text(screen.route, fontSize = 18.sp)
                 }
             }
         }
