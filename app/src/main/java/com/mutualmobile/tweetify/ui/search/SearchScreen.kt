@@ -21,44 +21,54 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
 fun SearchScreen(modifierPadding: PaddingValues, hashTagParam: String?) {
-    TweetifySurface(modifier = Modifier.padding(modifierPadding)) {
+    TweetifySurface(
+        modifier = Modifier.padding(modifierPadding),
+    ) {
         val selectedTab = remember {
             mutableStateOf(SearchTabs.ForYou)
         }
         val tabTitles = SearchTabs.values().map { it.title }
         Column {
-            ScrollableTabRow(
-                selectedTabIndex = selectedTab.value.ordinal,
-                backgroundColor = TweetifyTheme.colors.uiBackground, edgePadding = 0.dp,
-                contentColor = TweetifyTheme.colors.accent
-            ) {
-                tabTitles.forEachIndexed { index, title ->
-                    Tab(
-                        selected = isSelected(index, selectedTab),
-                        onClick = {
-                            selectedTab.value = SearchTabs.valueOf(title)
-                        },
-                        text = {
-                            Text(
-                                title,
-                                fontFamily = chirpFontFamily,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 14.sp,
-                                color = textColor(isSelected(index, selectedTab))
-                            )
-                        })
-                }
-            }
+            scrollableTab(selectedTab, tabTitles)
             Text("Search ${hashTagParam ?: ""}")
         }
     }
 }
 
 @Composable
+private fun scrollableTab(
+    selectedTab: MutableState<SearchTabs>,
+    tabTitles: List<String>
+) {
+    ScrollableTabRow(
+        selectedTabIndex = selectedTab.value.ordinal,
+        backgroundColor = TweetifyTheme.colors.uiBackground, edgePadding = 0.dp,
+        contentColor = TweetifyTheme.colors.accent
+    ) {
+        tabTitles.forEachIndexed { index, title ->
+            Tab(
+                selected = isSelected(index, selectedTab),
+                onClick = {
+                    selectedTab.value = SearchTabs.values().first { it.title == title }
+                },
+                text = {
+                    Text(
+                        title,
+                        fontFamily = chirpFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        color = textColor(isSelected(index, selectedTab))
+                    )
+                })
+        }
+    }
+}
+
+@Composable
 fun textColor(selected: Boolean): Color {
-    return if(selected){
+    return if (selected) {
         TweetifyTheme.colors.accent
-    }else{
+    } else {
         TweetifyTheme.colors.textSecondary
     }
 }

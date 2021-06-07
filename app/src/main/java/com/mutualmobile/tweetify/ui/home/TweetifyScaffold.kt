@@ -20,14 +20,17 @@ fun TweetifyScaffold() {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val (shouldShowAppBar, updateAppBarVisibility) = remember { mutableStateOf(true) }
-    val scope = rememberCoroutineScope()
+    val (shouldShowSearch, updateSearchBarVisibility) = remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     val navActions = remember(navController) {
         MainActions(
             navController,
             updateAppBarVisibility,
             scaffoldState,
-            scope
+            coroutineScope,
+            updateSearchBarVisibility
         )
     }
 
@@ -36,7 +39,14 @@ fun TweetifyScaffold() {
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),
-        topBar = { TweetifyHomeTopBar(scaffoldState, shouldShowAppBar, scope) },
+        topBar = {
+            TweetifyHomeTopBar(
+                scaffoldState,
+                shouldShowAppBar,
+                coroutineScope,
+                shouldShowSearch
+            )
+        },
         drawerContent = { TweetifyHomeDrawer() },
         bottomBar = {
             TweetifyHomeBottomAppBar(
@@ -57,7 +67,8 @@ fun TweetifyScaffold() {
             navController,
             padding,
             shouldShowAppBar = updateAppBarVisibility,
-            navAction = navActions
+            navAction = navActions,
+            shouldShowSearchBar = updateSearchBarVisibility
         )
     }
 }
@@ -67,10 +78,11 @@ fun TweetifyScaffold() {
 private fun TweetifyHomeTopBar(
     scaffoldState: ScaffoldState,
     shouldShowAppBar: Boolean,
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    shouldShowSearch: Boolean
 ) {
     if (shouldShowAppBar) {
-        TweetifyTopAppBar {
+        TweetifyTopAppBar(shouldShowSearch = shouldShowSearch) {
             scope.launch {
                 if (scaffoldState.drawerState.isOpen) {
                     scaffoldState.drawerState.close()

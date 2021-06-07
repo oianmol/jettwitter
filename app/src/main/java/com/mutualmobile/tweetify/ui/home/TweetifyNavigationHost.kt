@@ -4,7 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
@@ -29,6 +29,7 @@ fun TweetifyNavigationHost(
     padding: PaddingValues,
     shouldShowAppBar: (Boolean) -> Unit,
     navAction: MainActions,
+    shouldShowSearchBar: (Boolean) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -38,7 +39,7 @@ fun TweetifyNavigationHost(
         // Tweet Detail
         composeTweetDetailNavigation(navAction, navController, shouldShowAppBar)
 
-        bottomTabs(navAction, padding)
+        bottomTabs(navAction, padding,shouldShowSearchBar)
     }
 }
 
@@ -55,7 +56,7 @@ private fun NavGraphBuilder.composeTweetDetailNavigation(
             shouldShowAppBar(true)
             navController.navigateUp()
         }
-        val tweetsViewModel: TDViewModel = hiltNavGraphViewModel()
+        val tweetsViewModel: TDViewModel = hiltViewModel()
 
         TwitterDetailsScreen(
             tweetId = backStackEntry.arguments?.getString(TWEET_ID_KEY),
@@ -71,10 +72,12 @@ private fun NavGraphBuilder.composeTweetDetailNavigation(
 
 private fun NavGraphBuilder.bottomTabs(
     actions: MainActions,
-    padding: PaddingValues
+    padding: PaddingValues,
+    shouldShowSearchBar: (Boolean) -> Unit
 ) {
     composable(BottomNavigationScreens.Home.route) { backStack ->
-        val tweetsViewModel: TweetsViewModel = hiltNavGraphViewModel()
+        shouldShowSearchBar(false)
+        val tweetsViewModel: TweetsViewModel = hiltViewModel()
         HomeScreen(
             navigateToTweet = { tweetId ->
                 actions.navigateToTweet(tweetId, backStack)
@@ -93,6 +96,7 @@ private fun NavGraphBuilder.bottomTabs(
         "${BottomNavigationScreens.Search.route}/{$HASH_TAG_KEY}",
         arguments = listOf(navArgument(HASH_TAG_KEY) { type = NavType.StringType })
     ) {
+        shouldShowSearchBar(true)
         SearchScreen(
             modifierPadding = padding,
             hashTagParam = it.arguments?.getString(HASH_TAG_KEY)
@@ -103,6 +107,7 @@ private fun NavGraphBuilder.bottomTabs(
     }
 
     composable(BottomNavigationScreens.Search.route) {
+        shouldShowSearchBar(true)
         SearchScreen(
             modifierPadding = padding,
             hashTagParam = it.arguments?.getString(HASH_TAG_KEY)
@@ -113,12 +118,16 @@ private fun NavGraphBuilder.bottomTabs(
     }
 
     composable(BottomNavigationScreens.Notifications.route) {
+        shouldShowSearchBar(false)
+
         NotificationScreen(modifierPadding = padding)
         BackHandler {
             actions.drawerCheck()
         }
     }
     composable(BottomNavigationScreens.Messages.route) {
+        shouldShowSearchBar(false)
+
         MessagesScreen(modifierPadding = padding, onClickMessage = {
 
         })
@@ -142,6 +151,7 @@ class MainActions(
     private val shouldShowAppBar: (Boolean) -> Unit,
     private val scaffoldState: ScaffoldState,
     private val scope: CoroutineScope,
+    private val shouldShowSearchBar: (Boolean) -> Unit,
 ) {
 
     fun drawerCheck() {
@@ -162,6 +172,7 @@ class MainActions(
     }
 
     fun navigateToSearch(hashTag: String, navigateHomeFirst: Boolean = false) {
+        shouldShowSearchBar(true)
         if (navigateHomeFirst) {
             while (!navController.navigateUp()) {
                 navController.popBackStack()

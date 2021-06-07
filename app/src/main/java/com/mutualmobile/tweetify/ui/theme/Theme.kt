@@ -36,7 +36,8 @@ private val LightColorPalette = TweetifyColorPalette(
     progressIndicatorBg = LightGrey,
     switchColor = TwitterColor,
     statusBarColor = Neutral6,
-    isDark = false
+    isDark = false,
+    searchBarBgColor = LightGrey
 )
 
 private val DarkColorPalette = TweetifyColorPalette(
@@ -61,7 +62,8 @@ private val DarkColorPalette = TweetifyColorPalette(
     progressIndicatorBg = LightGrey,
     switchColor = TwitterColor,
     statusBarColor = GreyBg,
-    isDark = true
+    isDark = true,
+    searchBarBgColor = SearchBarDarkColor
 )
 
 @Composable
@@ -121,8 +123,11 @@ class TweetifyColorPalette(
     progressIndicatorBg: Color,
     switchColor: Color,
     statusBarColor:Color,
-    isDark: Boolean
+    isDark: Boolean,
+    searchBarBgColor:Color
 ) {
+    var searchBarBg by mutableStateOf(searchBarBgColor)
+        private set
     var brand by mutableStateOf(brand)
         private set
     var accent by mutableStateOf(accent)
@@ -189,6 +194,7 @@ class TweetifyColorPalette(
         switchColor = other.switchColor
         statusBarColor = other.statusBarColor
         isDark = other.isDark
+        searchBarBg = other.searchBarBg
     }
 }
 

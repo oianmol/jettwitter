@@ -13,13 +13,14 @@ val TextSecondaryDark = Color(0xff212121)
 val TextSecondary = Color(0xff5f6368)
 val DarkGreen = Color(0xff056449)
 val GreyBg = Color(0xff15202b)
+val SearchBarDarkColor = Color(0xff10171e)
 
 val Shadow1 = Color(0xffded6fe)
 
 val Ocean11 = Color(0xff005687)
 val Ocean2 = Color(0xffbbfdfd)
 
-val Neutral7 = Color(0xdef000000)
+val Neutral7 = Color(0xff000000)
 val Neutral6 = Color(0x99000000)
 val Neutral3 = Color(0x1fffffff)
 val Neutral2 = Color(0x61ffffff)
