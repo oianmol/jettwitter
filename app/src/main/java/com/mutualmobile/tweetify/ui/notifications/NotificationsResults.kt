@@ -1,7 +1,6 @@
 package com.mutualmobile.tweetify.ui.notifications
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -17,8 +16,9 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.mutualmobile.tweetify.R
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
+import com.mutualmobile.tweetify.ui.theme.FunctionalRed
+import com.mutualmobile.tweetify.ui.theme.FunctionalRedDark
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
-import com.mutualmobile.tweetify.utils.PHOTO_URL
 
 @Composable
 fun NotificationsResults(notificationVM: NotificationsViewModel) {
@@ -41,16 +41,16 @@ fun ComposeNotificationTweet(notificationTweet: NotificationTweet) {
         ComposeNotificationTweetInternal(notificationTweet)
         Divider(color = Color.DarkGray.copy(AlphaNearOpaque), thickness = 0.5.dp)
     }
-
 }
 
 @Composable
 private fun ComposeNotificationTweetInternal(notificationTweet: NotificationTweet) {
-    Row(modifier = Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp, end = 8.dp)) {
+    Row(modifier = Modifier.padding(start = 24.dp, top = 4.dp, bottom = 4.dp, end = 8.dp)) {
+        val resourceId = getResourceId(notificationTweet)
         Icon(
-            painterResource(id = R.drawable.ic_notifications_bottom),
+            painterResource(id = resourceId.first),
             contentDescription = null,
-            tint = TweetifyTheme.colors.accent,
+            tint = resourceId.second,
             modifier = Modifier
                 .requiredSize(50.dp)
                 .padding(12.dp),
@@ -81,10 +81,23 @@ private fun ComposeNotificationTweetInternal(notificationTweet: NotificationTwee
                     username = notificationTweet.userName
                 )
             }
-
         }
     }
 }
+
+@Composable
+private fun getResourceId(notificationTweet: NotificationTweet) =
+    when (notificationTweet.notificationType) {
+        NotificationType.FOLLOWED -> {
+            Pair(R.drawable.ic_profile, FunctionalRedDark)
+        }
+        NotificationType.LIKED_REPLY -> {
+            Pair(R.drawable.ic_vector_heart_stroke, FunctionalRed)
+        }
+        NotificationType.NEW_TWEET -> {
+            Pair(R.drawable.ic_notifications_bottom, TweetifyTheme.colors.accent)
+        }
+    }
 
 @Composable
 fun ComposeTextWithBoldUserName(text: String, username: String) {
