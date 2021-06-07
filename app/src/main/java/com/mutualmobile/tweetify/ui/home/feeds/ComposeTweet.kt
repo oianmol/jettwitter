@@ -108,16 +108,20 @@ fun ComposeFooter(tweet: Tweet) {
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
-            Text(text = tweet.tRTCount.toString(), modifier = Modifier.padding(start = 4.dp),
-                fontSize = 14.sp)
+            Text(
+                text = tweet.tRTCount.toString(), modifier = Modifier.padding(start = 4.dp),
+                fontSize = 14.sp
+            )
         }
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painterResource(id = R.drawable.ic_vector_heart_stroke), contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
-            Text(text = tweet.tLikeCount.toString(), modifier = Modifier.padding(start = 4.dp),
-                fontSize = 14.sp)
+            Text(
+                text = tweet.tLikeCount.toString(), modifier = Modifier.padding(start = 4.dp),
+                fontSize = 14.sp
+            )
         }
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
@@ -205,7 +209,7 @@ fun ComposeMetadataFooter(title: String, desc: String, modifier: Modifier) {
 }
 
 @Composable
-fun ComposeTime(time: Long) {
+fun ComposeTime(time: Long, color: Color? = null) {
     Text(
         DateUtils.getRelativeTimeSpanString(
             time,
@@ -214,7 +218,8 @@ fun ComposeTime(time: Long) {
         ).toString(),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        fontSize = 14.sp
+        fontSize = 14.sp,
+        color = color ?: TweetifyTheme.colors.textPrimary
     )
 }
 

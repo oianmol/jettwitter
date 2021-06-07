@@ -15,29 +15,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mutualmobile.tweetify.chirpFontFamily
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
 fun SearchScreen(modifierPadding: PaddingValues, hashTagParam: String?) {
+    val searchVM : SearchTabViewModel = hiltViewModel()
     TweetifySurface(
         modifier = Modifier.padding(modifierPadding),
     ) {
         val selectedTab = remember {
-            mutableStateOf(SearchTabs.ForYou)
+            mutableStateOf(SearchTab.ForYou)
         }
-        val tabTitles = SearchTabs.values().map { it.title }
+        val tabTitles = SearchTab.values().map { it.title }
         Column {
-            scrollableTab(selectedTab, tabTitles)
-            Text("Search ${hashTagParam ?: ""}")
+            ScrollableTab(selectedTab, tabTitles)
+            SearchResults(searchVM)
         }
     }
 }
 
+
+
 @Composable
-private fun scrollableTab(
-    selectedTab: MutableState<SearchTabs>,
+private fun ScrollableTab(
+    selectedTab: MutableState<SearchTab>,
     tabTitles: List<String>
 ) {
     ScrollableTabRow(
@@ -49,7 +53,7 @@ private fun scrollableTab(
             Tab(
                 selected = isSelected(index, selectedTab),
                 onClick = {
-                    selectedTab.value = SearchTabs.values().first { it.title == title }
+                    selectedTab.value = SearchTab.values().first { it.title == title }
                 },
                 text = {
                     Text(
@@ -76,5 +80,5 @@ fun textColor(selected: Boolean): Color {
 @Composable
 private fun isSelected(
     index: Int,
-    selectedTab: MutableState<SearchTabs>
+    selectedTab: MutableState<SearchTab>
 ) = index == selectedTab.value.ordinal
