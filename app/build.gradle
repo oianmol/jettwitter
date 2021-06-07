@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -17,6 +19,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["dagger.hilt.disableModulesHaveInstallInCheck"] = "true"
+            }
         }
     }
 
@@ -53,18 +60,33 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation("androidx.compose.runtime:runtime:1.0.0-beta07")
-    implementation 'androidx.activity:activity-compose:1.3.0-alpha08'
+    implementation("androidx.compose.runtime:runtime:1.0.0-beta08")
+    implementation 'androidx.activity:activity-compose:1.3.0-beta01'
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
     implementation "com.google.android.material:material:1.3.0"
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha01")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha02")
     implementation 'org.jsoup:jsoup:1.11.1'
-    implementation("androidx.activity:activity-compose:1.3.0-alpha08")
-    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha01'
+    implementation("androidx.activity:activity-compose:1.3.0-beta01")
+    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha02'
+
+    // hilt
+    implementation "com.google.dagger:hilt-android:$hiltCoreVersion"
+    implementation "androidx.hilt:hilt-navigation-compose:$hiltComposeNavigation"
+    kapt "com.google.dagger:hilt-compiler:$hiltCoreVersion"
+    kapt "androidx.hilt:hilt-compiler:$hiltVersion"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hiltCoreVersion"
+    kaptAndroidTest "com.google.dagger:hilt-compiler:$hiltCoreVersion"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
+
+    implementation "com.jakewharton.timber:timber:4.7.1"
+
+
     implementation 'com.google.accompanist:accompanist-insets:0.10.0'
     implementation 'com.google.accompanist:accompanist-coil:0.10.0'
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.11.1"
+
     implementation "com.airbnb.android:lottie:3.6.1"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -26,7 +26,7 @@ fun ComposeTweetAdvertisementBanner() {
         color = TweetifyTheme.colors.uiBackground,
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BannerTitle()
@@ -52,7 +52,8 @@ private fun BannerButton() {
             text = "Get started",
             fontFamily = chirpFontFamily,
             color = Color.White,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp
         )
     }
 }

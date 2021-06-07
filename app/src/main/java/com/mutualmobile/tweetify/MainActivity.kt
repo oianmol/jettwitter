@@ -3,11 +3,11 @@ package com.mutualmobile.tweetify
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TweetifyTheme {
-                TweetifyApp()
+                TweetifyUiMain()
             }
         }
     }

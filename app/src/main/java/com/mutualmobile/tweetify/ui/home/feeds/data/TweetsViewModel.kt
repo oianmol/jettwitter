@@ -1,37 +1,33 @@
 package com.mutualmobile.tweetify.ui.home.feeds.data
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import timber.log.Timber
+import javax.inject.Inject
 
-class TweetsViewModel(var tweetId: String? = "1") : ViewModel() {
-
+@HiltViewModel
+class TweetsViewModel @Inject constructor(
+    private val repository: TweetsRepository
+) : ViewModel() {
     var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
         private set
-
-    var tweetByIdState by mutableStateOf<TweetState>(TweetState.Loading)
-        private set
-
-    private val repository = TweetsRepository()
 
     init {
         tweetsState = TweetState.Loading
         fetchTweets()
-        Log.e("vm","fetch tweets")
+        Timber.e("fetch tweets")
     }
 
     private fun fetchTweets() {
         viewModelScope.launch {
             val tweets = repository.fetchAsync()
-            tweetId?.let { tweetId ->
-                tweets.firstOrNull { it.tUid == tweetId }?.let {
-                    tweetByIdState = TweetState.SuccessTweet(it)
-                }
-            }
+            delay(3000)
             tweetsState = TweetState.Success(tweets)
         }
     }
@@ -42,5 +38,9 @@ class TweetsViewModel(var tweetId: String? = "1") : ViewModel() {
             tweet.metadata = meta
             fetchTweets()
         }
+    }
+
+    fun fetchLatest() {
+        fetchTweets()
     }
 }

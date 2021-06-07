@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
@@ -13,6 +14,8 @@ import com.mutualmobile.tweetify.ui.home.DestinationsArguments.HASH_TAG_KEY
 import com.mutualmobile.tweetify.ui.home.DestinationsArguments.TWEET_ID_KEY
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.BottomNavigationScreens
 import com.mutualmobile.tweetify.ui.home.bottomnavigation.TwitterNavigationScreen
+import com.mutualmobile.tweetify.ui.home.feeds.data.TweetsViewModel
+import com.mutualmobile.tweetify.ui.home.feeds.tweetdetails.TDViewModel
 import com.mutualmobile.tweetify.ui.home.feeds.tweetdetails.TwitterDetailsScreen
 import com.mutualmobile.tweetify.ui.messages.MessagesScreen
 import com.mutualmobile.tweetify.ui.notifications.NotificationScreen
@@ -52,6 +55,8 @@ private fun NavGraphBuilder.composeTweetDetailNavigation(
             shouldShowAppBar(true)
             navController.navigateUp()
         }
+        val tweetsViewModel: TDViewModel = hiltNavGraphViewModel()
+
         TwitterDetailsScreen(
             tweetId = backStackEntry.arguments?.getString(TWEET_ID_KEY),
             onBack = {
@@ -59,7 +64,7 @@ private fun NavGraphBuilder.composeTweetDetailNavigation(
             },
             hashTagNavigator = { hashTag ->
                 actions.navigateToSearch(hashTag, navigateHomeFirst = true)
-            }
+            },tweetsViewModel
         )
     }
 }
@@ -69,13 +74,15 @@ private fun NavGraphBuilder.bottomTabs(
     padding: PaddingValues
 ) {
     composable(BottomNavigationScreens.Home.route) { backStack ->
+        val tweetsViewModel: TweetsViewModel = hiltNavGraphViewModel()
         HomeScreen(
             navigateToTweet = { tweetId ->
                 actions.navigateToTweet(tweetId, backStack)
             },
-            modifierPadding = padding, navigateToHashTagSearch = { hashTagSearchParam ->
+            modifierPadding = padding,
+            navigateToHashTagSearch = { hashTagSearchParam ->
                 actions.navigateToSearch(hashTagSearchParam)
-            }
+            },tweetsViewModel
         )
         BackHandler {
             actions.drawerCheck()

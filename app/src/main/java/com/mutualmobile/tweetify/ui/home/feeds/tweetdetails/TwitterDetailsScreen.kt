@@ -8,21 +8,22 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.home.feeds.ComposeTweet
+import com.mutualmobile.tweetify.ui.home.feeds.data.Tweet
 import com.mutualmobile.tweetify.ui.home.feeds.data.TweetState
-import com.mutualmobile.tweetify.ui.home.feeds.data.TweetsViewModel
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
 fun TwitterDetailsScreen(
     tweetId: String?,
     onBack: () -> Unit,
-    tweetViewModel: TweetsViewModel = viewModel(),
-    hashTagNavigator: (String) -> Unit
+    hashTagNavigator: (String) -> Unit,
+    tweetViewModel: TDViewModel
 ) {
+    tweetViewModel.fetchTweetById(tweetId)
     val tweetState = tweetViewModel.tweetByIdState
     Scaffold(
         modifier = Modifier
@@ -32,13 +33,17 @@ fun TwitterDetailsScreen(
         contentColor = TweetifyTheme.colors.textSecondary,
     ) { paddingExtras ->
         if (tweetState is TweetState.SuccessTweet) {
-            TweetifySurface(modifier = Modifier.clickable { onBack.invoke() }
+            TweetifySurface(modifier = Modifier
+                .clickable { onBack.invoke() }
                 .padding(paddingExtras)) {
                 ComposeTweet(
-                    tweet = tweetState.data, tweetsViewModel = tweetViewModel,
+                    tweet = tweetState.data,
                     onClickTweet = {
 
-                    }, hashTagNavigator = hashTagNavigator
+                    },
+                    hashTagNavigator = hashTagNavigator,
+                    onUrlRecognized = { tweet: Tweet, url: String ->
+                    }
                 )
             }
         }

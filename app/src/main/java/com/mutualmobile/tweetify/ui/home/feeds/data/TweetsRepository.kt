@@ -153,4 +153,8 @@ class TweetsRepository {
         return tweetUrlMeta
     }
 
+    fun tweetById(tweetId: String?): Tweet? {
+        return tweetsList.firstOrNull { it.tUid == tweetId }
+    }
+
 }

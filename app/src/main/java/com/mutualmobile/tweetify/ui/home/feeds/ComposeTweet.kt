@@ -19,6 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,12 +35,11 @@ import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 @Composable
 fun ComposeTweet(
     tweet: Tweet,
-    tweetsViewModel: TweetsViewModel = viewModel(),
+    onUrlRecognized: (Tweet, String) -> Unit,
     onClickTweet: (Tweet) -> Unit,
     hashTagNavigator: (String) -> Unit
 ) {
     TweetifySurface(modifier = Modifier.clickable {
-        tweetsViewModel.tweetId = tweet.tUid
         onClickTweet.invoke(tweet)
     }) {
         Column {
@@ -48,7 +48,7 @@ fun ComposeTweet(
                 Spacer(modifier = Modifier.width(14.dp))
                 ComposeTweetColumn(
                     tweet,
-                    tweetsViewModel,
+                    onUrlRecognized,
                     hashTagNavigator = hashTagNavigator,
                     onClickTweet
                 )
@@ -61,7 +61,7 @@ fun ComposeTweet(
 @Composable
 private fun ComposeTweetColumn(
     tweet: Tweet,
-    tweetsViewModel: TweetsViewModel,
+    onUrlRecognized: (Tweet, String) -> Unit,
     hashTagNavigator: (String) -> Unit,
     onClickTweet: (Tweet) -> Unit
 ) {
@@ -73,7 +73,7 @@ private fun ComposeTweetColumn(
             tweet.tUText,
             urlRecognizer = { url ->
                 if (tweet.metadata == null) {
-                    tweetsViewModel.loadMetadata(tweet, url)
+                    onUrlRecognized.invoke(tweet, url)
                 }
             },
             hashTagNavigator = hashTagNavigator,
@@ -91,24 +91,39 @@ private fun ComposeTweetColumn(
 fun ComposeFooter(tweet: Tweet) {
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painterResource(id = R.drawable.ic_vector_reply), contentDescription = null)
-            Text(text = tweet.tCommentCount.toString(), modifier = Modifier.padding(start = 4.dp))
+            Icon(
+                painterResource(id = R.drawable.ic_vector_reply),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+            Text(
+                text = tweet.tCommentCount.toString(),
+                modifier = Modifier.padding(start = 4.dp),
+                fontSize = 14.sp
+            )
         }
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painterResource(id = R.drawable.ic_vector_retweet_stroke),
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
             )
-            Text(text = tweet.tRTCount.toString(), modifier = Modifier.padding(start = 4.dp))
+            Text(text = tweet.tRTCount.toString(), modifier = Modifier.padding(start = 4.dp),
+                fontSize = 14.sp)
         }
         Row(modifier = Modifier.padding(4.dp)) {
-            Icon(painterResource(id = R.drawable.ic_vector_heart_stroke), contentDescription = null)
-            Text(text = tweet.tLikeCount.toString(), modifier = Modifier.padding(start = 4.dp))
+            Icon(
+                painterResource(id = R.drawable.ic_vector_heart_stroke), contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+            Text(text = tweet.tLikeCount.toString(), modifier = Modifier.padding(start = 4.dp),
+                fontSize = 14.sp)
         }
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painterResource(id = R.drawable.ic_vector_share_android),
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
             )
         }
 
@@ -118,18 +133,11 @@ fun ComposeFooter(tweet: Tweet) {
 @Composable
 fun ComposeTweetMetadata(tweet: Tweet) {
     val uriHandler = LocalUriHandler.current
-
     if (tweet.metadata != null && tweet.metadata?.title != null) {
         val tweetUrlMeta = tweet.metadata!!
         TweetifySurface(
             shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.clickable {
-                tweet.metadata?.url?.let { uriHandler.openUri(it) }
-            }.border(
-                2.dp,
-                TweetifyTheme.colors.uiBorder,
-                RoundedCornerShape(12.dp)
-            )
+            modifier = surfaceModifier(tweet, uriHandler)
         ) {
             ConstraintLayout {
                 val (image, footer) = createRefs()
@@ -137,7 +145,10 @@ fun ComposeTweetMetadata(tweet: Tweet) {
                     painter = rememberCoilPainter(request = tweetUrlMeta.image ?: tweet.tUImage),
                     contentDescription = null, modifier = Modifier
                         .constrainAs(image) {
-                            top.linkTo(parent.top, margin = 0.dp)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
                         }
                         .height(180.dp)
                         .fillMaxWidth(), contentScale = ContentScale.Crop
@@ -146,13 +157,27 @@ fun ComposeTweetMetadata(tweet: Tweet) {
                     tweetUrlMeta.desc!!,
                     modifier = Modifier
                         .constrainAs(footer) {
-                            bottom.linkTo(image.bottom, margin = 0.dp)
+                            bottom.linkTo(parent.bottom)
                         }
                         .fillMaxWidth())
             }
         }
     }
 }
+
+@Composable
+private fun surfaceModifier(
+    tweet: Tweet,
+    uriHandler: UriHandler
+) = Modifier
+    .clickable {
+        tweet.metadata?.url?.let { uriHandler.openUri(it) }
+    }
+    .border(
+        2.dp,
+        TweetifyTheme.colors.uiBorder,
+        RoundedCornerShape(12.dp)
+    )
 
 @Composable
 fun ComposeMetadataFooter(title: String, desc: String, modifier: Modifier) {
@@ -212,7 +237,7 @@ fun ComposeNameHandlerOverflow(name: String, tUHandler: String, showOverflow: Bo
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if(showOverflow){
+        if (showOverflow) {
             Icon(
                 painterResource(id = R.drawable.ic_vector_overflow),
                 contentDescription = null,
