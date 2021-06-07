@@ -3,8 +3,6 @@ package com.mutualmobile.tweetify.ui.search
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +14,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.mutualmobile.tweetify.R
-import com.mutualmobile.tweetify.ui.components.TweetifySurface
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
@@ -43,30 +40,37 @@ fun SearchResults(searchVM: SearchTabViewModel) {
 @Composable
 fun ComposeSearchItem(searchTwitter: SearchTwitter) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp)) {
-            Text(
-                searchTwitter.searchCategory, fontWeight = FontWeight.Bold,
-                color = TweetifyTheme.colors.textPrimary
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                searchTwitter.hashTagTitle,
-                color = TweetifyTheme.colors.textPrimary,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                searchTwitter.totalTweets,
-                color = TweetifyTheme.colors.textPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        LeftContent(searchTwitter)
         OtherEnd(searchTwitter)
+    }
+}
+
+@Composable
+private fun LeftContent(searchTwitter: SearchTwitter) {
+    Column(modifier = Modifier
+        .fillMaxWidth(0.8f)
+        .padding(8.dp)) {
+        Text(
+            searchTwitter.searchCategory, fontWeight = FontWeight.Bold,
+            color = TweetifyTheme.colors.textPrimary
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            searchTwitter.hashTagTitle,
+            color = TweetifyTheme.colors.textSecondary,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            searchTwitter.totalTweets,
+            color = TweetifyTheme.colors.textPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -81,17 +85,12 @@ private fun OtherEnd(searchTwitter: SearchTwitter) {
             tint = Color.Gray
         )
     } else {
-        TweetifySurface(
-            shape = RoundedCornerShape(5.dp),
+        Image(
+            rememberCoilPainter(searchTwitter.imageUrl),
             modifier = Modifier
-                .requiredSize(80.dp),
-            contentColor = TweetifyTheme.colors.uiBackground
-        ) {
-            Image(
-                rememberCoilPainter(searchTwitter.imageUrl),
-                contentDescription = null
-            )
-        }
+                .padding(12.dp),
+            contentDescription = null
+        )
     }
 }
 
