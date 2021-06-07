@@ -3,6 +3,7 @@ package com.mutualmobile.tweetify.ui.search
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.mutualmobile.tweetify.R
+import com.mutualmobile.tweetify.ui.theme.AlphaNearOpaque
+import com.mutualmobile.tweetify.ui.theme.AlphaNearTransparent
 import com.mutualmobile.tweetify.ui.theme.TweetifyTheme
 
 @Composable
@@ -27,6 +30,12 @@ fun SearchResults(searchVM: SearchTabViewModel) {
                 ComposeSearchHeader(searchHeader)
             }
         }
+        item {
+            Divider(
+                color = TweetifyTheme.colors.uiBorder.copy(AlphaNearTransparent),
+                thickness = 5.dp
+            )
+        }
         if (searchItems is SearchState.Success) {
             items(searchItems.searchData.size) {
                 searchItems.searchData.forEach { searchTwitter ->
@@ -39,13 +48,19 @@ fun SearchResults(searchVM: SearchTabViewModel) {
 
 @Composable
 fun ComposeSearchItem(searchTwitter: SearchTwitter) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        LeftContent(searchTwitter)
-        OtherEnd(searchTwitter)
+    Column() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            LeftContent(searchTwitter)
+            OtherEnd(searchTwitter)
+        }
+        Divider(color = Color.Gray.copy(AlphaNearOpaque), thickness = 0.5.dp)
     }
+
 }
 
 @Composable
