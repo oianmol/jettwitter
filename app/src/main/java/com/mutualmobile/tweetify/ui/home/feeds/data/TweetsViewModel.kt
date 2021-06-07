@@ -18,6 +18,8 @@ class TweetsViewModel @Inject constructor(
     var tweetsState by mutableStateOf<TweetState>(TweetState.Loading)
         private set
 
+    var tweets: List<Tweet>? = null
+
     init {
         fetchTweets()
         Timber.e("fetch tweets")
@@ -26,25 +28,27 @@ class TweetsViewModel @Inject constructor(
     private fun fetchTweets() {
         viewModelScope.launch {
             tweetsState = TweetState.Loading
-            val tweets = repository.fetchAsync()
+            tweets = repository.fetchAsync()
             delay(500)
-            tweetsState = TweetState.Success(tweets)
+            tweetsState = TweetState.Success(tweets!!)
         }
     }
 
     fun loadMetadata(tweet: Tweet, url: String) {
         viewModelScope.launch {
             val meta = repository.fetchUrlMatadata(url)
-            tweet.metadata = meta
-            if (tweetsState is TweetState.Success) {
-                (tweetsState as TweetState.Success).data.find { it.tUid == tweet.tUid }?.metadata =
-                    meta
-            }
-            tweetsState = TweetState.Success( (tweetsState as TweetState.Success).data)
+            tweets?.firstOrNull { it.tUid == tweet.tUid }?.metadata =
+                meta
+            tweetsState = TweetState.Success(tweets!!)
         }
     }
 
     fun fetchLatest() {
-        fetchTweets()
+        viewModelScope.launch {
+            tweetsState = TweetState.Loading
+            tweets = repository.fetchLatestAsync()
+            delay(500)
+            tweetsState = TweetState.Success(tweets!!)
+        }
     }
 }

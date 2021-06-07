@@ -157,4 +157,11 @@ class TweetsRepository {
         return tweetsList.firstOrNull { it.tUid == tweetId }
     }
 
+    fun fetchLatestAsync(): List<Tweet>? {
+        val copy = tweetsList
+        copy.shuffle()
+        tweetsList.addAll(copy)
+        return tweetsList
+    }
+
 }

@@ -52,7 +52,7 @@ fun HomeScreen(
             onRefresh = {
                 Timber.e("fetch latest")
                 tweetsViewModel.fetchLatest()
-            }, refreshTriggerDistance = 180.dp
+            }
         ) {
             LazyColumn {
                 item {
